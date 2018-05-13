@@ -2,14 +2,14 @@
 @extends('admin.layouts.common')
 
 <!-- 标题 -->
-@section('title','角色列表')
+@section('title','管理员列表')
 <!-- 内容 -->
 @section('content')
     <fieldset class="layui-elem-field site-demo-button" style="margin-top: 10px;">
         <div class="layui-field-box">
             <div class="layui-col-xs12">
                 <div class="layui-btn-group demoTable" style="float: right; margin-right: 6px">
-                    <a href="{{ route('role.create') }}"class="layui-btn" style="margin-left: 30px;">添加</a>
+                    <a href="{{ route('admin.create') }}"class="layui-btn" style="margin-left: 30px;">添加</a>
                 </div>
             </div>
 
@@ -21,6 +21,16 @@
         </div>
     </fieldset>
 
+    <script type="text/html" id="tpl">
+        @verbatim
+        {{#  if(d.rolesID){ }}                    //TODO>>>>>>>>>数组
+        <span style="color: orangered;">已冻结</span>
+        {{#  } else { }}
+        正常
+        {{#  } }}
+        @endverbatim
+    </script>
+
     <script>
         layui.use(['table', 'form'], function() {
             var table = layui.table,
@@ -28,16 +38,15 @@
 
             table.render({
                 elem: '#demo'
-                , url: '{{ route("role.getData") }}' //数据接口
+                , url: '{{ route("admin.getData") }}' //数据接口
                 , width: 1640
                 , height: 500
                 , page: true //开启分页
                 , cols: [[ //表头
                     {type: 'checkbox', fixed: 'left'}
-                    , {field: 'id', title: '序号', sort: true}
-                    , {field: 'name', title: '角色名称'}
-                    , {field: 'display_name', title: '显示名称'}
-                    , {field: 'description', title: '描述'}
+                    , {field: 'admin_id', title: '序号', sort: true}
+                    , {field: 'admin_name', title: '管理员名称'}
+                    , {field: 'rolesID', title: '角色名称', templet: "tpl"}
                     , {field: 'created_time', title: '创建时间'}
                     , {field: 'updated_time', title: '更新时间'}
                     , {fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
@@ -55,7 +64,7 @@
                             type: 'DELETE',
                             dataType: 'json',
                             data: {'_token':token},
-                            url: 'role/' + data.id,
+                            url: 'admin/' + data.admin_id,
                             success: function (data) {
                                 if (data.code == 1) {
                                     layer.alert(data.msg, {icon: 1});
@@ -67,7 +76,7 @@
                         })
                     });
                 } else if(obj.event === 'edit'){
-                    location.href= 'role/'+ data.id+'/edit';
+                    location.href= 'admin/'+ data.id+'/edit';
                 }
             });
         });

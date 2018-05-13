@@ -8,7 +8,6 @@
 
 namespace App\Repositories;
 
-use  App\Repositories\Contracts\RepositoryInterface;
 use  App\Repositories\Eloquent\Repository;
 
 class RestrictRepository extends Repository

@@ -7,6 +7,7 @@ use App\Models\Member;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\MemberRepository as MRepository;
+use Illuminate\Support\Facades\Auth;
 
 
 class MemberController extends BaseController
@@ -16,6 +17,7 @@ class MemberController extends BaseController
     public function __construct(MRepository $MRepository)
     {
         $this->MRepository = $MRepository;
+        $this->middleware("member");
     }
     /**
      * Display a listing of the resource.
@@ -24,6 +26,7 @@ class MemberController extends BaseController
      */
     public function index(Request $request)
     {
+//        dd(Auth::check());
         $input = $request->all();
 
         return view("admin.member.index", compact("input"));

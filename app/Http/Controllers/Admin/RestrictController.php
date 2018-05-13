@@ -114,7 +114,6 @@ class RestrictController extends BaseController
         $arr = $request->filter();
         $data  = $this->repository->limit($arr);
         $count = $this->repository->getCount($arr);
-
         return json_encode(['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Repositories\PermissionRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
@@ -9,10 +10,10 @@ use App\Repositories\RoleRepository;
 
 class RoleController extends Controller
 {
-    private $RoleRepository;
+    private $repository;
 
     public function  __construct(RoleRepository $RoleRepository){
-        $this->RoleRepository = $RoleRepository;
+        $this->repository = $RoleRepository;
     }
 
     /**
@@ -20,10 +21,9 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $roles = $this->RoleRepository->getAll();
-        return view('admin.role.index',compact('roles'));
+        return view('admin.role.index');
     }
 
     /**
@@ -31,11 +31,10 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Role $roles,PermissionRepository $permission)
     {
-        $nodes = $this->RoleRepository->getNodes();
-//        dd($nodes);
-        return view('admin.role.create', compact("nodes"));
+        $permissions = $permission->getAll();
+        return view("admin.role.create", compact("roles","permissions"));
     }
 
     /**
@@ -46,19 +45,12 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        /*$this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'display_name' => 'required',
-            'description' => 'required',
-            'permission' => 'required',
-        ]);*/
+        $data = $request->only("name", "display_name", 'description');
 
-        $data = $request->except("_token");
-        $rs = $this->RoleRepository->create($data);
-        if ($rs) {
-            return redirect("admin/role")->with("success","添加成功!");
+        if ($this->repository->create($data)) {
+            return redirect("admin/role/index")->with(["success"=>1, "msg"=>"操作成功!"]);
         } else {
-            return redirect("admin/role")->withErrors("添加失败!");
+            return redirect("admin/role/index")->withErrors("操作失败!");
         }
     }
     /**
@@ -69,12 +61,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::find($id);
-        $rolePermissions = Permission::join("permission_role","permission_role.permission_id","=","permissions.id")
-            ->where("permission_role.role_id",$id)
-            ->get();
 
-        return view('roles.show',compact('role','rolePermissions'));
     }
 
     /**
@@ -83,14 +70,14 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, PermissionRepository $permission)
     {
-        $role = Role::find($id);
-        $permission = Permission::get();
-        $rolePermissions = DB::table("permission_role")->where("permission_role.role_id",$id)
-            ->pluck('permission_role.permission_id','permission_role.permission_id')->toArray();
-
-        return view('roles.edit',compact('role','permission','rolePermissions'));
+        $roles = $this->repository->find($id);
+//        dd($roles->permissions);
+        $roles->permission = $permission->getPremissions($id);
+        $permissions = $permission->getAll();
+//        dd($roles, $permission);
+        return view('admin.role.create',compact('roles','permissions'));
     }
 
     /**
@@ -102,26 +89,12 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'display_name' => 'required',
-            'description' => 'required',
-            'permission' => 'required',
-        ]);
+        $data = $request->only("name", "display_name", 'description');
+        $permissions = $request->get("permission");
+//        dd($permissions);
+        $this->repository->update1($id, $data, $permissions);
 
-        $role = Role::find($id);
-        $role->display_name = $request->input('display_name');
-        $role->description = $request->input('description');
-        $role->save();
-
-        DB::table("permission_role")->where("permission_role.role_id",$id)
-            ->delete();
-
-        foreach ($request->input('permission') as $key => $value) {
-            $role->attachPermission($value);
-        }
-
-        return redirect()->route('roles.index')
-            ->with('success','Role updated successfully');
+        return redirect("admin/role")->with(["success"=>1, "msg"=>"操作成功!"]);
     }
     /**
      * Remove the specified resource from storage.
@@ -131,8 +104,25 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        DB::table("roles")->where('id',$id)->delete();
-        return redirect()->route('roles.index')
-            ->with('success','Role deleted successfully');
+        if ($this->repository->delete($id)) {
+            return json_encode(['code'=>1,'msg'=>'删除成功']);
+        } else {
+            return json_encode(['code'=>0,'msg'=>'删除失败']);
+        }
+
+    }
+
+    /**
+     * 表格数据接口
+     * @param Request $request
+     * @return json
+     */
+    public function getData(Request $request)
+    {
+        $arr = $request->all();
+//        dd($arr);
+        $data = $this->repository->limit($arr);
+        $count = $this->repository->getCount($arr);
+        return json_encode(['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data]);
     }
 }

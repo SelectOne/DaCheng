@@ -64,10 +64,11 @@
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a class="" href="javascript:;">数据分析</a>
+                    <a class="" href="javascript:;">权限管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="3" date-url="{{url('admin/member/index')}}">用户列表</a></dd>
-                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="4" date-url="{{url('admin/restrict/index')}}">限制列表</a></dd>
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="3" date-url="{{url('admin/permission/index')}}">权限列表</a></dd>
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="4" date-url="{{url('admin/role')}}">角色列表</a></dd>
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="5" date-url="{{url('admin/admin')}}">管理员列表</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="">发布商品</a></li>
