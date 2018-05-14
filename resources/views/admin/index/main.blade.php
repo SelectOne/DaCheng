@@ -71,6 +71,13 @@
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="5" date-url="{{url('admin/admin')}}">管理员列表</a></dd>
                     </dl>
                 </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">充值系统</a>
+                    <dl class="layui-nav-child">
+
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="6" date-url="{{url('admin/order/index')}}">订单管理</a></dd>
+                    </dl>
+                </li>
                 <li class="layui-nav-item"><a href="">发布商品</a></li>
             </ul>
         </div>

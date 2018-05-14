@@ -31,20 +31,19 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('role/destroy', 'RoleController@destroy');
     Route::get('role/create', 'RoleController@create');*/
 // PermissionController
-    Route::get('permission/index', 'PermissionController@index')->name("roles.index");
+    Route::get('permission/index', 'PermissionController@index');
     Route::get('permission/getData', 'PermissionController@getData');
-    Route::post('permission/store', 'PermissionController@store')->name("roles.store");
-    Route::post('permission/update', 'PermissionController@update')->name("roles.update");
-    Route::get('permission/destroy', 'PermissionController@destroy')->name("roles.destory");
+    Route::post('permission/store', 'PermissionController@store');
+    Route::post('permission/update', 'PermissionController@update');
+    Route::get('permission/destroy', 'PermissionController@destroy');
 
     // MemberController
     Route::get('member/index', 'MemberController@index');
     Route::get('member/getData', 'MemberController@getData');                                            // 数据表格接口
     Route::get('member/checkStatus', 'MemberController@checkStatus');                                    // 冻结/解冻
-    Route::get('member/recharge', 'MemberController@recharge');                                    // 冻结/解冻
-    Route::get('member/limit', 'MemberController@limit');
+    Route::get('member/recharge', 'MemberController@recharge');                                          // 冻结/解冻
+    Route::get('member/limit', 'MemberController@limit');                                                // 限制列表
 
-                                                  // 限制列表
     // RestrictController
     Route::get('restrict/index', 'RestrictController@index');
     Route::get('restrict/getData', 'RestrictController@getData');
@@ -52,6 +51,8 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::post('restrict/update', 'RestrictController@update');
     Route::get('restrict/destroy', 'RestrictController@destroy');
 
-
+    // OrderController
+    Route::get('order/index', 'OrderController@index');
+    Route::get('order/getData', 'OrderController@getData');
 
 });
