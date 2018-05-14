@@ -46,12 +46,9 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $data = $request->only("name", "display_name", 'description');
-
-        if ($this->repository->create($data)) {
-            return redirect("admin/role/index")->with(["success"=>1, "msg"=>"操作成功!"]);
-        } else {
-            return redirect("admin/role/index")->withErrors("操作失败!");
-        }
+        $permissions = $request->get("permission");
+        $this->repository->create1($data, $permissions);
+        return redirect("admin/role")->with(["success"=>1, "msg"=>"操作成功!"]);
     }
     /**
      * Display the specified resource.

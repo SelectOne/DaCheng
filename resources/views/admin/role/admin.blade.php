@@ -22,13 +22,14 @@
     </fieldset>
 
     <script type="text/html" id="tpl">
-        @verbatim
-        {{#  if(d.rolesID){ }}                    //TODO>>>>>>>>>数组
-        <span style="color: orangered;">已冻结</span>
-        {{#  } else { }}
+
+        @{{#  if(d.rolesID){ }}
+        <span style="color: orangered;">
+            @{{d.rolesID}}
+        </span>
+        @{{#  } else { }}
         正常
-        {{#  } }}
-        @endverbatim
+        @{{#  } }}
     </script>
 
     <script>
@@ -46,7 +47,7 @@
                     {type: 'checkbox', fixed: 'left'}
                     , {field: 'admin_id', title: '序号', sort: true}
                     , {field: 'admin_name', title: '管理员名称'}
-                    , {field: 'rolesID', title: '角色名称', templet: "tpl"}
+                    , {field: 'rolesID', title: '角色名称', templet: "#tpl"}
                     , {field: 'created_time', title: '创建时间'}
                     , {field: 'updated_time', title: '更新时间'}
                     , {fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
@@ -76,7 +77,7 @@
                         })
                     });
                 } else if(obj.event === 'edit'){
-                    location.href= 'admin/'+ data.id+'/edit';
+                    location.href= 'admin/'+ data.admin_id+'/edit';
                 }
             });
         });

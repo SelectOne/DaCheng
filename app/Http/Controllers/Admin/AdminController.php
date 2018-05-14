@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Admin;
 use App\Repositories\AdminRepository;
 use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
@@ -29,9 +30,10 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Admin $admin, RoleRepository $roleRepository)
     {
-        echo '12345';
+        $roles = $roleRepository->getRoles();
+        return view("admin.role.create_update", compact("admin", "roles"));
     }
 
     /**
@@ -42,7 +44,10 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-
+        $data = $request->only("admin_name");
+        $role = $request->get("role");
+        $this->repository->create1($data, $role);
+        return redirect("admin/admin")->with(["success"=>1, "msg"=>"操作成功!"]);
     }
 
     /**
@@ -62,9 +67,12 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, RoleRepository $roleRepository)
     {
-        //
+        $admin = $this->repository->first($id);
+        $roles = $roleRepository->getRoles();
+//        dd($roles, $admin);
+        return view('admin.role.create_update',compact('roles','admin'));
     }
 
     /**
@@ -76,7 +84,9 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $role = $request->get('role');
+        $this->repository->update1($id, $role);
+        return redirect("admin/admin")->with(["success"=>1, "msg"=>"操作成功!"]);
     }
 
     /**
@@ -98,10 +108,7 @@ class AdminController extends Controller
     public function getData(Request $request, RoleRepository $roleRepository)
     {
         $arr = $request->all();
-
         $data = $this->repository->limit($arr, $roleRepository);
-//        $data['rolesID'] = $roleRepository->getRoleID($id);
-//        dd($data);
         $count = $this->repository->getCount($arr);
         return json_encode(['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data]);
     }

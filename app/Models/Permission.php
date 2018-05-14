@@ -10,5 +10,5 @@ class Permission extends EntrustPermission
     protected $table = "permission";
     public $timestamps = false;
     public $primaryKey = 'id';
-    protected $fillable = [ 'name', 'display_name', 'description'];
+    protected $fillable = [ 'name', 'display_name', 'description', "created_time", "updated_time"];
 }

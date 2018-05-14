@@ -56,13 +56,29 @@ class RoleRepository extends Repository
         });
     }
 
+    public function create1($data, $permission)
+    {
+        DB::transaction(function () use($data, $permission){
+            $data['created_time'] = time();
+            $data['updated_time'] = time();
+            $role = Role::create($data);
+            if ( ! is_null($permission)) {
+                foreach ($permission as $key => $value) {
+                    $role->attachPermission($value);
+                }
+            }
+        });
+    }
+
     public function getRoleID($id)
     {
-        /*$rolePermissions = DB::table("permission_role")->where("permission_role.role_id",$id)
-            ->pluck('permission_role.permission_id','permission_role.permission_id')->toArray();
-        return $rolePermissions;*/
         $rolesID = RoleAdmin::where('admin_id', $id)->pluck("role_id")->toArray();
         return $rolesID;
     }
 
+    public function getRoles()
+    {
+        $roles = $this->model->pluck( 'name', 'id')->toArray();
+        return $roles;
+    }
 }
