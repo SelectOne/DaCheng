@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Repositories\CardRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CardController extends Controller
+class CardController extends BaseController
 {
+    private $repository;
+
+    /**
+     * CardController constructor.
+     */
+    public function __Construct(CardRepository $cardRepository)
+    {
+        $this->repository = $cardRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +25,7 @@ class CardController extends Controller
      */
     public function index()
     {
-        //
+        return view("admin.card.index");
     }
 
     /**
@@ -81,5 +92,12 @@ class CardController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function getData(Request $request)
+    {
+        $arr = $request->all();
+        return parent::TableApi($arr, $this->repository);
     }
 }

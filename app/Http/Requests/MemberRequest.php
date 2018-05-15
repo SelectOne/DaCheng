@@ -50,12 +50,12 @@ class MemberRequest extends FormRequest
     public function filter()
     {
         $arr = $this->all();
-        $arr['id'] = array_key_exists("id", $arr)?:"";
-        $arr['pid'] = array_key_exists("pid", $arr)?:"";
-        $arr['nickname'] = array_key_exists("nickname", $arr)?:"";
-        $time = array_key_exists("time", $arr)?:"";
-        $arr['ip'] = array_key_exists("ip", $arr)?:"";
-        $arr['machine_ip'] = array_key_exists("machine_ip", $arr)?:"";
+        $arr['id'] = !is_null($arr['id'])?$arr['id']:"";
+        $arr['pid'] = !is_null($arr['pid'])?$arr['pid']:"";
+        $arr['nickname'] = !is_null($arr['nickname'])?$arr['nickname']:"";
+        $time = !is_null($arr['time'])?$arr['time']:"";
+        $arr['ip'] = !is_null($arr['ip'])?$arr['ip']:"";;
+        $arr['machine_ip'] = !is_null($arr['machine_ip'])?$arr['machine_ip']:"";;
         $not = true;
         if($time){
             $tt = explode(' -- ',$time);

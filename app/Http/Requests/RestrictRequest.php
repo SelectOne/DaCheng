@@ -71,6 +71,11 @@ class RestrictRequest extends FormRequest
         $data['ip'] = array_key_exists("limit_ip", $data)?$data['limit_ip']:"";
         $data['type'] = array_key_exists("type", $data)?$data['type']:"";
         $data['offset'] = ( $data['page']-1 ) * $data['limit'];
+        if ( ! array_key_exists('field', $data) && ! array_key_exists('order', $data) )
+        {
+            $data['field'] = "id";
+            $data['order'] = "desc";
+        }
         return $data;
     }
 }

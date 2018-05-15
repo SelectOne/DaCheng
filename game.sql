@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
-Source Server Version : 50719
+Source Server         : localhost
+Source Server Version : 50553
 Source Host           : localhost:3306
 Source Database       : game
 
 Target Server Type    : MYSQL
-Target Server Version : 50719
+Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-05-14 00:26:25
+Date: 2018-05-15 18:01:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -23,18 +23,44 @@ CREATE TABLE `gm_admin` (
   `admin_id` int(4) unsigned NOT NULL AUTO_INCREMENT,
   `admin_name` varchar(32) NOT NULL,
   `password` char(32) NOT NULL,
-  `role_id` int(11) NOT NULL,
   `salt` char(6) NOT NULL,
-  `cteated_time` char(11) DEFAULT NULL,
+  `created_time` char(11) DEFAULT NULL,
   `updated_time` char(11) DEFAULT NULL,
   PRIMARY KEY (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of gm_admin
 -- ----------------------------
-INSERT INTO `gm_admin` VALUES ('127', 'admin', 'd4ff078eb0f7847381c1e0570309b874', '0', 'd5a52d', '1526223368', '1526223368');
-INSERT INTO `gm_admin` VALUES ('128', 'haha', 'd4ff078eb0f7847381c1e0570309b874', '0', 'd5a52d', '1526223368', '1526223368');
+INSERT INTO `gm_admin` VALUES ('127', 'admin', 'd4ff078eb0f7847381c1e0570309b874', 'd5a52d', '1526223368', '1526223368');
+INSERT INTO `gm_admin` VALUES ('128', 'haha', 'd4ff078eb0f7847381c1e0570309b874', 'd5a52d', '1526223368', '1526223368');
+INSERT INTO `gm_admin` VALUES ('130', 'jake', '00567e5054ceb1babb992e636ef05d09', '262829', '1526282946', '1526282946');
+INSERT INTO `gm_admin` VALUES ('132', 'rosi', '28f11e28432fde72d5b410ae336f799d', '262830', '1526283036', '1526283036');
+
+-- ----------------------------
+-- Table structure for gm_card
+-- ----------------------------
+DROP TABLE IF EXISTS `gm_card`;
+CREATE TABLE `gm_card` (
+  `card_id` varchar(255) NOT NULL,
+  `admin_id` tinyint(2) NOT NULL COMMENT '管理员ID',
+  `card_name` varchar(255) NOT NULL COMMENT '实卡名称',
+  `card_num` tinyint(4) NOT NULL COMMENT '实卡数量',
+  `card_price` decimal(10,2) NOT NULL COMMENT '实卡价格',
+  `total_price` decimal(10,2) NOT NULL COMMENT '总金额',
+  `given` int(11) NOT NULL COMMENT '每张卡赠送金币',
+  `ip` varchar(255) NOT NULL COMMENT 'IP地址',
+  `created_time` char(11) NOT NULL COMMENT '生成时间',
+  `expire_time` char(11) NOT NULL COMMENT '过期时间',
+  `type_id` tinyint(2) NOT NULL DEFAULT '1' COMMENT '实卡类型ID',
+  `card_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '实卡状态  0:未使用   1:已使用',
+  PRIMARY KEY (`card_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='会员卡';
+
+-- ----------------------------
+-- Records of gm_card
+-- ----------------------------
+INSERT INTO `gm_card` VALUES ('VIP1000001', '127', '体验卡', '1', '10.00', '10.00', '200', '192.168.0.1', '1526284250', '1526384250', '1', '0');
 
 -- ----------------------------
 -- Table structure for gm_log
@@ -114,6 +140,33 @@ CREATE TABLE `gm_migrations` (
 INSERT INTO `gm_migrations` VALUES ('1', '2018_05_13_145050_entrust_setup_tables', '1');
 
 -- ----------------------------
+-- Table structure for gm_order
+-- ----------------------------
+DROP TABLE IF EXISTS `gm_order`;
+CREATE TABLE `gm_order` (
+  `order_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sn` varchar(255) NOT NULL COMMENT '订单号',
+  `mid` int(11) NOT NULL COMMENT '用户ID',
+  `game_id` int(11) NOT NULL COMMENT '游戏ID',
+  `amount` decimal(10,2) NOT NULL COMMENT '充值金额',
+  `given` int(11) NOT NULL COMMENT '赠送金币',
+  `paid` decimal(10,2) NOT NULL COMMENT '实付金额',
+  `type` tinyint(2) NOT NULL COMMENT '付款方式  0:实卡充值  1:支付宝  2:微信  3:银行卡  4:其它',
+  `status` tinyint(2) NOT NULL COMMENT '订单状态  0:已取消  1:已完成  2:未支付',
+  `address` varchar(255) NOT NULL COMMENT '充值地址',
+  `created_time` char(11) NOT NULL,
+  `card_id` varchar(255) DEFAULT NULL COMMENT '会员卡ID',
+  PRIMARY KEY (`order_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+-- ----------------------------
+-- Records of gm_order
+-- ----------------------------
+INSERT INTO `gm_order` VALUES ('1', 'CZ1000001', '100010', '100010', '100.00', '2000', '50.00', '1', '1', '武汉', '1526281781', 'VIP1000001');
+INSERT INTO `gm_order` VALUES ('2', 'CZ1000002', '10008', '10008', '500.00', '10000', '250.00', '2', '2', '汉街', '1526284250', 'VIP1000002');
+INSERT INTO `gm_order` VALUES ('3', 'CZ1000003', '10006', '10006', '100.00', '2000', '50.00', '3', '0', '万达', '1526284250', 'VIP1000003');
+
+-- ----------------------------
 -- Table structure for gm_permissions
 -- ----------------------------
 DROP TABLE IF EXISTS `gm_permissions`;
@@ -151,8 +204,10 @@ CREATE TABLE `gm_permission_role` (
 -- Records of gm_permission_role
 -- ----------------------------
 INSERT INTO `gm_permission_role` VALUES ('1', '1');
-INSERT INTO `gm_permission_role` VALUES ('1', '2');
-INSERT INTO `gm_permission_role` VALUES ('2', '2');
+INSERT INTO `gm_permission_role` VALUES ('2', '1');
+INSERT INTO `gm_permission_role` VALUES ('1', '9');
+INSERT INTO `gm_permission_role` VALUES ('1', '12');
+INSERT INTO `gm_permission_role` VALUES ('2', '12');
 
 -- ----------------------------
 -- Table structure for gm_restrict
@@ -191,13 +246,15 @@ CREATE TABLE `gm_roles` (
   `updated_time` char(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `roles_name_unique` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of gm_roles
 -- ----------------------------
-INSERT INTO `gm_roles` VALUES ('1', 'owner', '拥有者', '天神般的权限', '1526194596', '1526223610');
-INSERT INTO `gm_roles` VALUES ('2', 'noramal', '普通管理员', '一般', '1526223368', '1526214256');
+INSERT INTO `gm_roles` VALUES ('1', 'owner', '拥有者', '天神般的权限', '1526194596', '1526353487');
+INSERT INTO `gm_roles` VALUES ('2', 'noramal', '普通管理员', '一般', '1526223368', '1526285086');
+INSERT INTO `gm_roles` VALUES ('9', 'asd', 'asd', 'asd', '1526281529', '1526281529');
+INSERT INTO `gm_roles` VALUES ('12', 'sadsad', 'asd', 'asd', '1526281781', '1526281781');
 
 -- ----------------------------
 -- Table structure for gm_role_admin
@@ -216,5 +273,25 @@ CREATE TABLE `gm_role_admin` (
 -- Records of gm_role_admin
 -- ----------------------------
 INSERT INTO `gm_role_admin` VALUES ('127', '1');
-INSERT INTO `gm_role_admin` VALUES ('128', '1');
 INSERT INTO `gm_role_admin` VALUES ('128', '2');
+INSERT INTO `gm_role_admin` VALUES ('130', '9');
+INSERT INTO `gm_role_admin` VALUES ('132', '9');
+INSERT INTO `gm_role_admin` VALUES ('132', '12');
+
+-- ----------------------------
+-- Table structure for gm_type
+-- ----------------------------
+DROP TABLE IF EXISTS `gm_type`;
+CREATE TABLE `gm_type` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of gm_type
+-- ----------------------------
+INSERT INTO `gm_type` VALUES ('1', '体验卡');
+INSERT INTO `gm_type` VALUES ('2', '青铜卡');
+INSERT INTO `gm_type` VALUES ('3', '白金卡');
+INSERT INTO `gm_type` VALUES ('4', '黄金卡');

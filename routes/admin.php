@@ -54,5 +54,9 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     // OrderController
     Route::get('order/index', 'OrderController@index');
     Route::get('order/getData', 'OrderController@getData');
+    Route::get('order/test', 'OrderController@test');
 
+    // CardController
+    Route::resource('card','CardController');
+    Route::get('card/getData', 'CardController@getData')->name("card.getData");
 });

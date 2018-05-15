@@ -17,7 +17,7 @@ class MemberMiddleware
     public function handle($request, Closure $next)
     {
         $rs = Admin::find(session('admin_id'));
-        if ( ! $rs->can("member-*") ) {
+        if ( ! $rs->can("member-*") || ! $rs->hasRole("owner") ) {
             abort(403);
         }
         return $next($request);

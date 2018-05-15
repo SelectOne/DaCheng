@@ -17,7 +17,7 @@ class MemberController extends BaseController
     public function __construct(MRepository $MRepository)
     {
         $this->MRepository = $MRepository;
-        $this->middleware("member");
+//        $this->middleware("member");
     }
     /**
      * Display a listing of the resource.

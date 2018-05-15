@@ -5,5 +5,5 @@
 @section('title','错误提示')
 <!-- 内容 -->
 @section('content')
-    <h1>抱歉,您没有权限!请联系管理员开通权限</h1>
+    <h1>抱歉,您没有权限!请联系管理员开通权限sadsad</h1>
 @endsection

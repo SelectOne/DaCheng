@@ -12,7 +12,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">IP/机器码</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="limit_ip" id="limit_ip"  class="layui-input" value="{{ old("ip") }}" placeholder="ID">
+                            <input type="text" name="limit_ip" id="limit_ip"  class="layui-input" value="{{ old("limit_ip") }}" placeholder="ID">
                         </div>
                     </div>
                     <div class="layui-inline">
@@ -89,7 +89,20 @@
                     , {field: 'content', title: '备注'}
                     , {fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
                 ]]
-                , id: 'testReload'
+            });
+
+            //排序
+            table.on('sort(test)', function(obj){
+                console.log(obj.field); //当前排序的字段名
+                console.log(obj.type); //当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
+                console.log(this); //当前排序的 th 对象
+                table.reload('demo', {
+                    initSort: obj
+                    ,where: {
+                        field: obj.field //排序字段
+                        ,order: obj.type //排序方式
+                    }
+                });
             });
 
             //监听工具条
@@ -241,7 +254,7 @@
 
             var $ = layui.$, active = {
                 reload:function() {
-                    table.reload('testReload', {
+                    table.reload('demo', {
                         // 点击查询和刷新数据表会把以下参数传到后端进行查找和分页显示
                         where: {
                             limit_ip: $("input[name='limit_ip']").val()

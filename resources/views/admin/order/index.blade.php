@@ -8,29 +8,50 @@
     <fieldset class="layui-elem-field site-demo-button" style="margin-top: 10px;">
         <div class="layui-field-box">
             <div class="layui-col-xs12">
-                <blockquote class="layui-elem-quote layui-quote-nm">
+                <blockquote class="layui-elem-quote layui-quote-nm layui-form">
                     <div class="layui-inline">
-                        <label class="layui-form-label">ID</label>
+                        <label class="layui-form-label">基本查询</label>
                         <div class="layui-input-inline">
-                            <input type="number" name="id" id="id"  class="layui-input" value="{{ $input['id']??"" }}" placeholder="ID">
+                            <input type="text" name="id" id="id"  class="layui-input" value="{{ old("id") }}" placeholder="用户ID/游戏ID/订单号码">
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">昵称</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="nickname"  class="layui-input" value="{{ old('nickname') }}" placeholder="昵称">
+                            <select name="search_type" lay-verify="">
+                                <option value="1">按用户ID</option>
+                                <option value="2">按游戏ID</option>
+                                <option value="3">按订单号码</option>
+                            </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">上级ID</label>
+                        <label class="layui-form-label">充值类型</label>
                         <div class="layui-input-inline">
-                            <input type="number" name="pid" value="{{ old('pid') }}"  class="layui-input" placeholder="上级ID">
+                            <select name="type" lay-verify="">
+                                <option value="">请选择</option>
+                                <option value="0">实卡充值</option>
+                                <option value="1">支付宝</option>
+                                <option value="2">微信</option>
+                                <option value="3">银行卡</option>
+                                <option value="4">其它</option>
+                            </select>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">登录日期</label>
+                        <label class="layui-form-label">订单状态</label>
                         <div class="layui-input-inline">
-                            <input type="text" name='time' class="layui-input" id="time" placeholder="登录日期" value="{{ old('time') }}">
+                            <select name="status" lay-verify="">
+                                <option value="">请选择</option>
+                                <option value="0">已取消</option>
+                                <option value="1">已完成</option>
+                                <option value="2">未支付</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">订单日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name='created_time' class="layui-input" id="created_time" placeholder="订单日期" value="{{ old('created_time') }}">
                         </div>
                     </div>
                     <input type="hidden" name="Excel" value="1">
@@ -42,9 +63,6 @@
         </div>
         <div class="layui-btn-group demoTable">
             <button class="layui-btn layui-btn-normal" data-type="Excel">导出Excel表格</button>
-            <button class="layui-btn" data-type="freeze">冻结</button>
-            <button class="layui-btn" data-type="unfreeze">解冻</button>
-            <button class="layui-btn" data-type="recharge">充值</button>
         </div>
         <table id="demo"  class="layui-table"  lay-filter="test"></table>
     </fieldset>
@@ -61,57 +79,57 @@
 
     <script type="text/html" id="tpl1">
         @verbatim
-        {{#  if(d.pid != '0'){ }}
-        <a href="?id={{ d.pid }}" class="layui-table-link">{{ d.pid }}</a>
+        {{#  if(d.mid != '0'){ }}
+        <a class="layui-table-link">{{ d.mid }}</a>
         {{#  } else { }}
-        {{ d.pid }}
+        {{ d.mid }}
         {{#  } }}
         @endverbatim
     </script>
 
     <script type="text/html" id="tpl2">
         @verbatim
-        {{#  if(d.member_level == 1){ }}
-        普通会员
-        {{#  } else if (d.member_level == 2) { }}
-        中级会员
-        {{#  } else if (d.member_level == 3) { }}
-        高级会员
+        {{#  if(d.status == 1){ }}
+        已完成
+        {{#  } else if (d.status == 2) { }}
+        <span style="color: orangered">未支付</span>
+        {{#  } else if (d.status == 0) { }}
+        <span style="color: red;">已取消</span>
         {{#  } }}
         @endverbatim
     </script>
 
     <script type="text/html" id="tpl3">
         @verbatim
-        {{#  if(d.manage_level == 1){ }}
-        普通会员
-        {{#  } else if (d.manage_level == 2) { }}
-        中级会员
-        {{#  } else if (d.manage_level == 3) { }}
-        高级会员
-        {{#  } }}
-        @endverbatim
-    </script>
-
-    <script type="text/html" id="tpl4">
-        @verbatim
-        {{#  if(d.status){ }}
-        <span style="color: orangered;">已冻结</span>
-        {{#  } else { }}
-        正常
+        {{#  if(d.type == 1){ }}
+        支付宝
+        {{#  } else if (d.status == 2) { }}
+        微信
+        {{#  } else if (d.status == 3) { }}
+        银行卡
+        {{#  } else if (d.status == 4) { }}
+        其它
+        {{#  } else if (d.status == 0) { }}
+        实卡充值
         {{#  } }}
         @endverbatim
     </script>
 
     <script>
-        layui.use('laydate', function(){
+        layui.use(['element','form','layer','laydate'], function(){
+            var $ = layui.$;
+            var element = layui.element;
+            var form = layui.form;
             var laydate = layui.laydate;
-            //执行一个laydate实例
-            //日期范围
-            laydate.render({
-                elem: '#time'
+            form.render();
+
+                //执行一个laydate实例
+                //日期范围
+                laydate.render({
+                elem: '#created_time'
                 ,range: '--'
             });
+
         });
 
         layui.use('table', function() {
@@ -121,9 +139,9 @@
                 elem: '#demo'
                 , url: '{{url("admin/order/getData")}}' //数据接口
                 , where: {
-                    id: $('#id').val()
-                    ,ip: "{{ $input['ip']??"" }}"
-                    ,machine_ip: "{{ $input['machine_ip']??"" }}"
+                    {{--id: $('#id').val()--}}
+                    {{--,ip: "{{ $input['ip']??"" }}"--}}
+                    {{--,machine_ip: "{{ $input['machine_ip']??"" }}"--}}
                 }
                 , method: 'get'
                 , width: 1640
@@ -131,30 +149,25 @@
                 , page: true //开启分页
                 , cols: [[ //表头
                     {type: 'checkbox', fixed: 'left'}
-                    , {field: 'created_time', title: '订单日期', width: 100, unresize: true, sort: true}
-                    , {field: 'sn', title: '订单号码', width: 100, unresize: true, sort: true}
-                    , {field: 'type', title: '充值类型', width: 100, unresize: true, sort: true, templet: '#tpl1'}
-                    , {field: 'mid', title: '用户账号', width: 120,}
-                    , {field: 'game_id', title: '游戏ID', width: 100,}
-                    , {field: 'amount', title: '订单金额', width: 100, sort: true}
-                    , {field: 'given', title: '赠送金额', width: 100, sort: true}
-                    , {field: 'paid', title: '实付金额', width: 100, sort: true}
-                    , {field: 'status', title: '订单状态', width: 100, unresize: true, sort: true, templet: '#tpl2'}
+                    , {field: 'created_time', title: '订单日期', width:200, unresize: true, sort: true}
+                    , {field: 'sn', title: '订单号码', unresize: true, sort: true}
+                    , {field: 'type', title: '充值类型', unresize: true, sort: true, templet: '#tpl3'}
+                    , {field: 'mid', title: '用户账号', templet: '#tpl1'}
+                    , {field: 'game_id', title: '游戏ID'}
+                    , {field: 'amount', title: '订单金额', sort: true}
+                    , {field: 'given', title: '赠送金额', sort: true}
+                    , {field: 'paid', title: '实付金额', sort: true}
+                    , {field: 'status', title: '订单状态', unresize: true, templet: '#tpl2'}
+                    , {field: 'address', title: '订单地址'}
                     , /*{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}*/
                 ]]
             });
 
             //排序
-            table.on('sort(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-                // console.log(obj.field); //当前排序的字段名
-                // console.log(obj.type); //当前排序类型：desc（降序）、asc（升序）、null（空对象，默认排序）
-                // console.log(this); //当前排序的 th 对象
-
-                //尽管我们的 table 自带排序功能，但并没有请求服务端。
-                //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，如：
+            table.on('sort(test)', function(obj){
                 table.reload('demo', {
-                    initSort: obj //记录初始排序，如果不设的话，将无法标记表头的排序状态。 layui 2.1.1 新增参数
-                    ,where: { //请求参数
+                    initSort: obj
+                    ,where: {
                         field: obj.field //排序字段
                         ,order: obj.type //排序方式
                     }
@@ -176,13 +189,15 @@
 
             var $ = layui.$, active = {
                 reload:function() {
+
                     table.reload('demo', {
                         // 点击查询和刷新数据表会把以下参数传到后端进行查找和分页显示
                         where: {
                             id: $("input[name='id']").val()
-                            ,nickname: $("input[name='nickname']").val()
-                            ,pid: $("input[name='pid']").val()
-                            ,time: $("input[name='time']").val()
+                            ,search_type: $("[name='search_type']").val()
+                            ,type: $("[name='type']").val()
+                            ,status: $("[name='status']").val()
+                            ,created_time: $("input[name='created_time']").val()
                         }
                     });
                 },Excel:function() {
@@ -192,104 +207,6 @@
                             Excel: $("input[name='Excel']").val()
                         }
                     });
-                },freeze: function(){ //冻结
-                    var checkStatus = table.checkStatus('demo')
-                        ,data = checkStatus.data;
-                    //判断是否全部数据
-                    if (checkStatus.isAll || data.length > 2) {
-                        data.forEach(function (item) {
-                            console.log(item.id)
-                        })
-                        layer.msg("为了数据的安全性,请不要全选,多选!")
-                    } else if(data.length == 1) {
-                        if (data[0].status == 1) {
-                            layer.msg("该用户已冻结!")
-                        } else {
-                            layer.confirm('是否确定冻结该用户？', {
-                                btn: ['确定', '取消'] //可以无限个按钮
-                                ,
-                            }, function(index, layero){
-                                var id = data[0].id;
-
-                                $.ajax({
-                                    methord:"get",
-                                    url:"{{url("admin/member/checkStatus")}}",
-                                    dataType:"json",
-                                    data:{
-                                        'id':id,
-                                        'status':1
-                                    },
-                                    success:function (res) {
-                                        layer.msg(res.msg)
-                                        setTimeout(function () {
-                                            location.reload()
-                                        },600)
-                                    }
-                                })
-                                layer.close(index)
-
-                            }, function(index, layero){
-                                layer.close(index)
-                            })
-                        }
-                    }
-                },unfreeze: function () {
-                    var checkStatus = table.checkStatus('demo')
-                        ,data = checkStatus.data;
-                    if (data.length == 1) {
-                        if (data[0].status != 1) {
-                            layer.msg("该用户尚未冻结!")
-                        } else {
-                            layer.confirm('是否确定解冻该用户？', {
-                                btn: ['确定', '取消'] //可以无限个按钮
-                                ,
-                            }, function(index, layero){
-                                var id = data[0].id;
-
-                                $.ajax({
-                                    methord:"get",
-                                    url:"{{url("admin/member/checkStatus")}}",
-                                    dataType:"json",
-                                    data:{
-                                        'id': id,
-                                        'status': 0
-                                    },
-                                    success:function (res) {
-                                        layer.msg(res.msg)
-                                        setTimeout(function () {
-                                            location.reload()
-                                        },600)
-                                    }
-                                })
-                                layer.close(index)
-
-                            }, function(index, layero){
-                                layer.close(index)
-                            })
-                        }
-                    }
-                },recharge: function () {
-                    var checkStatus = table.checkStatus('demo')
-                        ,data = checkStatus.data;
-                    if (data.length == 1) {
-                        layer.open({
-                            id: 1,
-                            type: 1,
-                            title: '充值',
-                            skin: 'layui-layer-rim',
-                            area: ['250px', 'auto'],
-                            content: '<form action="{{url('admin/member/recharge')}}" id="chongzhi"><input name="id" type="hidden" id="hd" value=""><input id="num" name="num" type="text" class="layui-input" placeholder="请输入数字"></form>',
-                            btn: ['确定', '取消'],
-                            btn1: function (index, layero) {
-                                $("#hd").val(data[0].id);
-                                $('#chongzhi').submit();
-                                layer.close(index);
-                            },
-                            btn2: function (index, layero) {
-                                layer.close(index);
-                            }
-                        });
-                    }
                 }
             };
 

@@ -20,6 +20,7 @@ class RestrictRepository extends Repository
 
     public function limit($arr)
     {
+
         extract($arr);
         $data = $this->model()::offset($offset)->limit($arr['limit']);
         if ($type) {
