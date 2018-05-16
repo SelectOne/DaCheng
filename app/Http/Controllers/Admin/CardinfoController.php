@@ -2,34 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\CardRequest;
 use App\Repositories\CardInfoRepository;
-use App\Repositories\CardRepository;
-use App\Repositories\TypeRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CardController extends BaseController
+class CardinfoController extends BaseController
 {
     private $repository;
 
-    /**
-     * CardController constructor.
-     */
-    public function __Construct(CardRepository $cardRepository)
+    public function __construct(CardInfoRepository $cardInfoRepository)
     {
-        $this->repository = $cardRepository;
+        $this->repository = $cardInfoRepository;
     }
+
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TypeRepository $typeRepository)
+    public function index()
     {
-        $items = $typeRepository->all();
-        return view("admin.card.index", compact("items"));
+        return view("admin.card.list");
     }
 
     /**
@@ -44,14 +38,13 @@ class CardController extends BaseController
 
     /**
      * Store a newly created resource in storage.
-     * @param CardRequest $request
+     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CardRequest $request, CardInfoRepository $infoRepository)
+    public function store(Request $request)
     {
-        $data = $request->options();
-        $this->repository->creatCard($data);
-        return redirect()->route("card.index")->with(['code'=>1, 'msg'=>"添加成功"]);
+        //
     }
 
     /**
@@ -92,21 +85,19 @@ class CardController extends BaseController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return array
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        if ($this->repository->delete($id)) {
-            return json_encode(['code'=>1,'msg'=>'删除成功']);
-        } else {
-            return json_encode(['code'=>0,'msg'=>'删除失败']);
-        }
+        //
     }
 
-
-    public function getData(CardRequest $request)
+    public function getData(Request $request)
     {
-        $arr = $request->filter();
+        $arr = $request->all();
+//        dd($arr);
+//        dd(parent::TableApi($arr, $this->repository));
         return parent::TableApi($arr, $this->repository);
     }
+
 }

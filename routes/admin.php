@@ -62,4 +62,8 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('getPrice/{id}', function ($id, \App\Models\Type $type){
         return $type->where('id', $id)->value("card_price");
     })->name("type.getPrice");
+
+    // CardinfoController
+    Route::resource('cardinfo','CardinfoController');
+    Route::get('getCard', 'CardinfoController@getData')->name("cardinfo.getData");
 });

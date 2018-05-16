@@ -22,7 +22,7 @@ class RestrictRepository extends Repository
     {
 
         extract($arr);
-        $data = $this->model()::offset($offset)->limit($arr['limit']);
+        $data = $this->model()::offset($offset)->limit($arr['limit'])->orderBy($field, $order);
         if ($type) {
             $data = $data->where('ip', 'like',"%$ip%");
 

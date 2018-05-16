@@ -36,7 +36,7 @@ class CardRequest extends FormRequest
                 $data = $this->only(['type_id', 'card_price', 'card_num', 'given', 'expire_time', 'max_use', 'card_first', 'card_length']);
                 $data['info'] = [
                     'admin_id'     => session("admin_id"),
-                    'card_num'     => $data['card_price'],
+                    'card_num'     => $data['card_num'],
                     'given'        => $data['given'],
                     'total_price'  => $data['card_num'] * $data['card_price'],
                     'max_use'      => $data['max_use'],
@@ -55,6 +55,11 @@ class CardRequest extends FormRequest
         $arr = $this->all();
         $arr['card_id'] = $this->has("id")?$this->get("id"):"";
         $time = $this->has("created_time")?$this->get("created_time"):"";
+        if ( ! array_key_exists('field', $arr) && ! array_key_exists('order', $arr) )
+        {
+            $arr['field'] = "id";
+            $arr['order'] = "desc";
+        }
         $arr['not'] = true;
         if($time){
             $tt = explode(' -- ',$time);

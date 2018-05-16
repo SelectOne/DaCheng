@@ -22,7 +22,8 @@ class OrderRepository extends Repository
     {
 //        dd($arr);
         extract($arr);
-        $data = $this->model()::whereBetween('created_time', $tt,'and',$not)
+        $data = $this->model->whereBetween('created_time', $tt,'and',$not)
+                              ->orderBy($field, $order)
                               ->offset($arr['offset'])
                               ->limit($arr['limit']);
         if ( isset($mid) ) {
@@ -51,7 +52,7 @@ class OrderRepository extends Repository
     public function getCount($arr)
     {
         extract($arr);
-        $count = $this->model()::whereBetween('created_time', $tt,'and',$not);
+        $count = $this->model->whereBetween('created_time', $tt,'and',$not);
         if ( isset($mid) ) {
             $count = $count->where('mid', $mid);
         }

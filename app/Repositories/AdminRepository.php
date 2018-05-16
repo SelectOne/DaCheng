@@ -14,7 +14,7 @@ class AdminRepository extends Repository{
 
     public function checkLogin($name, $password)
     {
-        $admin = Admin:: where('admin_name', $name)->first();
+        $admin = $this->model->where('admin_name', $name)->first();
         $password = md5($password . $admin['salt']);
         if ($password == $admin['password']) {
             return $admin;
@@ -27,7 +27,12 @@ class AdminRepository extends Repository{
     public function limit($arr, $app)
     {
         $arr['offset'] = ( $arr['page']-1 ) * $arr['limit'];
-        $data = $this->model()::offset($arr['offset'])->limit($arr['limit'])->get();
+        if ( ! array_key_exists('field', $arr) && ! array_key_exists('order', $arr) )
+        {
+            $arr['field'] = "admin_id";
+            $arr['order'] = "desc";
+        }
+        $data = $this->model->offset($arr['offset'])->limit($arr['limit'])->orderBy($arr['field'], $arr['order'])->get();
         foreach ($data as $v) {
             $v['rolesID'] = $app->getRoleID($v['admin_id']);
             $roles = $app->getRoles();
@@ -46,14 +51,14 @@ class AdminRepository extends Repository{
     // 获取所有记录总数
     public function getCount($arr)
     {
-        $count = $this->model()::count();
+        $count = $this->model->count();
 
         return $count;
     }
 
     public function first($id)
     {
-        $admin = $this->model()::where('admin_id', $id)->first();
+        $admin = $this->model->where('admin_id', $id)->first();
         $admin['role'] = $admin->roles()->pluck('id')->toArray();
         return $admin;
     }
