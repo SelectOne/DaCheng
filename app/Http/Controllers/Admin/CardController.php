@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\CardRequest;
+use App\Repositories\CardInfoRepository;
 use App\Repositories\CardRepository;
+use App\Repositories\TypeRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -23,9 +26,10 @@ class CardController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(TypeRepository $typeRepository)
     {
-        return view("admin.card.index");
+        $items = $typeRepository->all();
+        return view("admin.card.index", compact("items"));
     }
 
     /**
@@ -40,13 +44,14 @@ class CardController extends BaseController
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
+     * @param CardRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CardRequest $request, CardInfoRepository $infoRepository)
     {
-        //
+        $data = $request->options();
+        $this->repository->creatCard($data);
+        return redirect()->route("card.index")->with(['code'=>1, 'msg'=>"添加成功"]);
     }
 
     /**
@@ -87,17 +92,23 @@ class CardController extends BaseController
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function destroy($id)
     {
-        //
+        if ($this->repository->delete($id)) {
+            return json_encode(['code'=>1,'msg'=>'删除成功']);
+        } else {
+            return json_encode(['code'=>0,'msg'=>'删除失败']);
+        }
     }
 
 
-    public function getData(Request $request)
+    public function getData(CardRequest $request)
     {
-        $arr = $request->all();
+        $arr = $request->filter();
+//        dd($arr);
+//        dd(parent::TableApi($arr, $this->repository));
         return parent::TableApi($arr, $this->repository);
     }
 }

@@ -12,7 +12,7 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
 
     // 权限
     Route::resource('admin','AdminController');
-    Route::get('getData','AdminController@getData')->name("admin.getData");
+    Route::get('getData1','AdminController@getData')->name("admin.getData");
 
 //    Route::resource('node','NodeController');
     Route::get('node', 'NodeController@index')->name('node.index');
@@ -58,5 +58,8 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
 
     // CardController
     Route::resource('card','CardController');
-    Route::get('card/getData', 'CardController@getData')->name("card.getData");
+    Route::get('getData', 'CardController@getData')->name("card.getData");
+    Route::get('getPrice/{id}', function ($id, \App\Models\Type $type){
+        return $type->where('id', $id)->value("card_price");
+    })->name("type.getPrice");
 });

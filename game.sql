@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-05-15 18:01:08
+Date: 2018-05-16 20:23:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,6 +24,8 @@ CREATE TABLE `gm_admin` (
   `admin_name` varchar(32) NOT NULL,
   `password` char(32) NOT NULL,
   `salt` char(6) NOT NULL,
+  `ip` varchar(255) NOT NULL,
+  `last_ip` varchar(255) NOT NULL,
   `created_time` char(11) DEFAULT NULL,
   `updated_time` char(11) DEFAULT NULL,
   PRIMARY KEY (`admin_id`)
@@ -32,35 +34,71 @@ CREATE TABLE `gm_admin` (
 -- ----------------------------
 -- Records of gm_admin
 -- ----------------------------
-INSERT INTO `gm_admin` VALUES ('127', 'admin', 'd4ff078eb0f7847381c1e0570309b874', 'd5a52d', '1526223368', '1526223368');
-INSERT INTO `gm_admin` VALUES ('128', 'haha', 'd4ff078eb0f7847381c1e0570309b874', 'd5a52d', '1526223368', '1526223368');
-INSERT INTO `gm_admin` VALUES ('130', 'jake', '00567e5054ceb1babb992e636ef05d09', '262829', '1526282946', '1526282946');
-INSERT INTO `gm_admin` VALUES ('132', 'rosi', '28f11e28432fde72d5b410ae336f799d', '262830', '1526283036', '1526283036');
+INSERT INTO `gm_admin` VALUES ('127', 'admin', 'd4ff078eb0f7847381c1e0570309b874', 'd5a52d', '192.168.0.1', '192.168.0.1', '1526223368', '1526223368');
+INSERT INTO `gm_admin` VALUES ('128', 'haha', 'd4ff078eb0f7847381c1e0570309b874', 'd5a52d', '192.168.0.1', '192.168.0.1', '1526223368', '1526223368');
+INSERT INTO `gm_admin` VALUES ('130', 'jake', '00567e5054ceb1babb992e636ef05d09', '262829', '192.168.0.1', '192.168.0.1', '1526282946', '1526282946');
+INSERT INTO `gm_admin` VALUES ('132', 'rosi', '28f11e28432fde72d5b410ae336f799d', '262830', '192.168.0.1', '192.168.0.1', '1526283036', '1526283036');
 
 -- ----------------------------
 -- Table structure for gm_card
 -- ----------------------------
 DROP TABLE IF EXISTS `gm_card`;
 CREATE TABLE `gm_card` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `card_id` varchar(255) NOT NULL,
-  `admin_id` tinyint(2) NOT NULL COMMENT '管理员ID',
-  `card_name` varchar(255) NOT NULL COMMENT '实卡名称',
-  `card_num` tinyint(4) NOT NULL COMMENT '实卡数量',
-  `card_price` decimal(10,2) NOT NULL COMMENT '实卡价格',
-  `total_price` decimal(10,2) NOT NULL COMMENT '总金额',
-  `given` int(11) NOT NULL COMMENT '每张卡赠送金币',
-  `ip` varchar(255) NOT NULL COMMENT 'IP地址',
-  `created_time` char(11) NOT NULL COMMENT '生成时间',
-  `expire_time` char(11) NOT NULL COMMENT '过期时间',
-  `type_id` tinyint(2) NOT NULL DEFAULT '1' COMMENT '实卡类型ID',
-  `card_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '实卡状态  0:未使用   1:已使用',
-  PRIMARY KEY (`card_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='会员卡';
+  `type_id` tinyint(4) NOT NULL COMMENT '实卡类型',
+  `card_info_id` tinyint(4) NOT NULL COMMENT '实卡信息ID',
+  `is_used` tinyint(1) NOT NULL DEFAULT '0' COMMENT '实卡状态  0:未使用   1:已使用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of gm_card
 -- ----------------------------
-INSERT INTO `gm_card` VALUES ('VIP1000001', '127', '体验卡', '1', '10.00', '10.00', '200', '192.168.0.1', '1526284250', '1526384250', '1', '0');
+INSERT INTO `gm_card` VALUES ('1', 'VIP1000001', '1', '1', '0');
+INSERT INTO `gm_card` VALUES ('2', 'VIP1000002', '2', '2', '0');
+INSERT INTO `gm_card` VALUES ('3', 'A469780031', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('4', 'A469780032', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('5', 'A469780033', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('6', 'A469780034', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('7', 'A469780035', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('8', 'A469780036', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('9', 'A469780037', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('10', 'A469780038', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('11', 'A469780039', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('12', 'A469801001', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('13', 'A469801002', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('14', 'A469801003', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('15', 'A469801004', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('16', 'A469801005', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('17', 'A469801006', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('18', 'A469801007', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('19', 'A469801008', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('20', 'A469801009', '3', '1', '0');
+
+-- ----------------------------
+-- Table structure for gm_card_info
+-- ----------------------------
+DROP TABLE IF EXISTS `gm_card_info`;
+CREATE TABLE `gm_card_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `admin_id` tinyint(2) NOT NULL COMMENT '管理员ID',
+  `card_num` tinyint(4) NOT NULL COMMENT '实卡数量',
+  `total_price` decimal(10,2) NOT NULL COMMENT '总金额',
+  `given` int(11) NOT NULL COMMENT '每张卡赠送金币',
+  `max_use` tinyint(2) NOT NULL COMMENT '单个玩家最多使用次数',
+  `created_time` char(11) NOT NULL COMMENT '生成时间',
+  `expire_time` char(11) NOT NULL COMMENT '过期时间  ',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='会员卡';
+
+-- ----------------------------
+-- Records of gm_card_info
+-- ----------------------------
+INSERT INTO `gm_card_info` VALUES ('1', '127', '10', '50.00', '200', '2', '1526284250', '1526384250');
+INSERT INTO `gm_card_info` VALUES ('2', '127', '5', '100.00', '500', '1', '1526284250', '1526384250');
+INSERT INTO `gm_card_info` VALUES ('3', '127', '50', '500.00', '100', '2', '1526469780', '1526465272');
+INSERT INTO `gm_card_info` VALUES ('4', '127', '50', '500.00', '100', '2', '1526469801', '1526465272');
 
 -- ----------------------------
 -- Table structure for gm_log
@@ -285,13 +323,14 @@ DROP TABLE IF EXISTS `gm_type`;
 CREATE TABLE `gm_type` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `card_price` decimal(10,2) NOT NULL COMMENT '实卡价格',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of gm_type
 -- ----------------------------
-INSERT INTO `gm_type` VALUES ('1', '体验卡');
-INSERT INTO `gm_type` VALUES ('2', '青铜卡');
-INSERT INTO `gm_type` VALUES ('3', '白金卡');
-INSERT INTO `gm_type` VALUES ('4', '黄金卡');
+INSERT INTO `gm_type` VALUES ('1', '体验卡', '10.00');
+INSERT INTO `gm_type` VALUES ('2', '青铜卡', '20.00');
+INSERT INTO `gm_type` VALUES ('3', '白金卡', '50.00');
+INSERT INTO `gm_type` VALUES ('4', '黄金卡', '100.00');

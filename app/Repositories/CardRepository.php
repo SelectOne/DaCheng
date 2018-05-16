@@ -8,7 +8,9 @@
 
 namespace App\Repositories;
 
+use App\Models\Card;
 use App\Repositories\Eloquent\Repository;
+use DB;
 
 class CardRepository extends Repository
 {
@@ -20,17 +22,28 @@ class CardRepository extends Repository
     // 分页
     public function limit($arr)
     {
-//        dd($arr);
         extract($arr);
-        $data = $this->model()::whereBetween('created_time', $tt,'and',$not)
+        $data = $this->model->with([
+            'info' => function ($query) use($tt, $not){
+                $query->select()->whereBetween('card_info.created_time', $tt,'and',$not);
+            },
+        ])
             ->offset($arr['offset'])
             ->limit($arr['limit']);
+
         if ( ! empty($card_id) ) {
-            $data = $data->where('card_id', $card_id);
+            $data = $data->where('card.card_id', $card_id);
         }
         $data = $data->get();
-        foreach ($data as $v) {
-            $v['created_time'] = date("Y-m-d H:i:s", $v['created_time']);
+        foreach ($data as &$v) {
+            $v['admin_name'] = $v->info->admin->admin_name;
+            $v['ip'] = $v->info->admin->ip;
+            $v['card_name'] = $v->type->name;
+            $v['card_price'] = $v->type->card_price;
+            $v['created_time'] = date("Y-m-d H:i:s" ,$v->info->created_time);
+            $v['card_num'] = $v->info->card_num;
+            $v['given'] = $v->info->given;
+            $v['total_price'] = $v->info->total_price;
         }
         return $data;
     }
@@ -39,11 +52,33 @@ class CardRepository extends Repository
     public function getCount($arr)
     {
         extract($arr);
+        $count = Card::with([
+            'info' => function ($query) use($tt, $not){
+                $query->select()->whereBetween('card_info.created_time', $tt,'and',$not);
+            },
+        ]);
+        
         if ( ! empty($card_id) ) {
-            $count = $this->model()::where('card_id', $card_id)->whereBetween('created_time', $tt,'and',$not)->count();
-        } else{
-            $count = $this->model()::whereBetween('created_time', $tt,'and',$not)->count();
+            $count = $count->where('card.card_id', $card_id);
         }
-        return $count;
+        return $count->count();
+    }
+
+    public function creatCard($data)
+    {
+        DB::transaction(function () use($data){
+            $id = DB::table('card_info')->insert($data['info']);
+
+            for ($i=1; $i<= $data['card_num']; $i++) {
+                list($a,$b)=explode(' ', microtime());
+                $unquid = substr(str_replace(".", "", $b.$a), 4, $data['card_length']-2);
+                $card_id = $data['card_first'].$unquid;
+                DB::table('card')->insert([
+                    'card_id' => $card_id.$i,
+                    'type_id' => $data['type_id'],
+                    'card_info_id' => $id,
+                ]);
+            }
+        });
     }
 }

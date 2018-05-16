@@ -7,7 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Card extends Model
 {
     protected $table = "card";
-    public $primaryKey = "card_id";
+    public $primaryKey = "id";
     public $timestamps = "false";
-    protected $fillable = [ "card_id", "admin_id", "card_name", "card_num", "card_price", "total_price", "given", "ip", "used", "created_time", "expire_time"];
+    protected $fillable = [ "card_id", "type_id", "card_info_id", "is_used"];
+
+    public function type()
+    {
+        return $this->belongsTo("App\Models\Type", "type_id", "id");
+    }
+
+    public function info()
+    {
+        return $this->belongsTo("App\Models\CardInfo", "card_info_id", "id");
+    }
+
+
 }

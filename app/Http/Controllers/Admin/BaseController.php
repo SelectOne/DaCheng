@@ -24,6 +24,6 @@ class BaseController extends Controller
     {
         $data = $repository->limit($arr);
         $count = $repository->getCount($arr);
-        return json_encode(['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data]);
+        return ['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data];
     }
 }

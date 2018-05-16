@@ -58,8 +58,6 @@ class OrderRequest extends FormRequest
         }else{
             $arr['tt'] = ['',''];
         }
-
-//        dd($arr);
         return $arr;
     }
 }

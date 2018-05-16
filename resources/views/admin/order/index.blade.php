@@ -189,7 +189,6 @@
 
             var $ = layui.$, active = {
                 reload:function() {
-
                     table.reload('demo', {
                         // 点击查询和刷新数据表会把以下参数传到后端进行查找和分页显示
                         where: {

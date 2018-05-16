@@ -50,7 +50,7 @@ class MemberRepository extends Repository
             $type  = 'desc';
         }
 
-        $data = $this->model()::where('nickname', 'like', "$nickname%")
+        $data = $this->model->where('nickname', 'like', "$nickname%")
                         ->whereBetween('login_time', $tt,'and',$not)
                         ->offset($offset)
                         ->limit($arr['limit'])
@@ -118,7 +118,7 @@ class MemberRepository extends Repository
         }else{
             $tt = ['',''];
         }
-        $count = $this->model()::where('nickname', 'like', "$nickname%")
+        $count = $this->model->where('nickname', 'like', "$nickname%")
                         ->whereBetween('login_time', $tt,'and',$not);
         if (!empty($id)) {
             $count = $count->where('id', $id);
