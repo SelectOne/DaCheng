@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\MemberRepository as MRepository;
 use Illuminate\Support\Facades\Auth;
-
+use App\Services\Helper;
 
 class MemberController extends BaseController
 {
@@ -28,7 +28,7 @@ class MemberController extends BaseController
     {
 //        dd(Auth::check());
         $input = $request->all();
-
+        Helper::plog("查看用户列表", 1);
         return view("admin.member.index", compact("input"));
     }
 
@@ -117,6 +117,7 @@ class MemberController extends BaseController
         $data = $request->all();
         $rs = $this->MRepository->update( ['status'=>$data['status']], $data['id'] );
         if ($rs) {
+            Helper::plog("冻结与解冻用户ID:".$data['id'], 2);
             return json_encode(['status'=>'ok', 'msg'=>"操作成功!"]);
         } else {
             return json_encode(['status'=>'notok', 'msg'=>"操作失败!"]);
@@ -133,6 +134,7 @@ class MemberController extends BaseController
         $data = $request->all();
         $rs = $this->MRepository->recharge($data['id'],$data['num']);
         if ($rs) {
+            Helper::plog("后台充值,用户ID:".$data['id'], 2);
             return redirect("admin/member/index")->with(["success"=>1, "msg"=>"充值成功!"]);
         } else {
             return redirect("admin/member/index")->withErrors("充值失败!");

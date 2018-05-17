@@ -7,6 +7,7 @@ use App\Http\Requests\TypeRequest;
 use App\Repositories\CardInfoRepository;
 use App\Repositories\CardRepository;
 use App\Repositories\TypeRepository;
+use App\Services\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -30,6 +31,7 @@ class CardController extends BaseController
     public function index(TypeRepository $typeRepository)
     {
         $items = $typeRepository->all();
+        Helper::plog("查看实卡管理", 1);
         return view("admin.card.index", compact("items"));
     }
 
@@ -52,6 +54,7 @@ class CardController extends BaseController
     {
         $data = $request->options();
         $this->repository->creatCard($data);
+        Helper::plog("新增实卡", 2);
         return redirect()->route("card.index")->with(['code'=>1, 'msg'=>"添加成功"]);
     }
 
@@ -98,6 +101,7 @@ class CardController extends BaseController
     public function destroy($id)
     {
         if ($this->repository->delete($id)) {
+            Helper::plog("删除实卡ID=".$id, 2);
             return json_encode(['code'=>1,'msg'=>'删除成功']);
         } else {
             return json_encode(['code'=>0,'msg'=>'删除失败']);

@@ -10,7 +10,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\Eloquent\Repository;
+use App\Services\Helper;
 
 class BaseController extends Controller
 {

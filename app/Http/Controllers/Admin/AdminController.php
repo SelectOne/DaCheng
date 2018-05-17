@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Admin;
 use App\Repositories\AdminRepository;
 use App\Repositories\RoleRepository;
+use App\Services\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -22,6 +23,7 @@ class AdminController extends Controller
      */
     public function index()
     {
+        Helper::plog("查看实卡管理", 1);
         return view("admin.role.admin");
     }
 
@@ -47,6 +49,7 @@ class AdminController extends Controller
         $data = $request->only("admin_name");
         $role = $request->get("role");
         $this->repository->create1($data, $role);
+        Helper::plog("新增管理员", 2);
         return redirect("admin/admin")->with(["success"=>1, "msg"=>"操作成功!"]);
     }
 
@@ -71,7 +74,6 @@ class AdminController extends Controller
     {
         $admin = $this->repository->first($id);
         $roles = $roleRepository->getRoles();
-//        dd($roles, $admin);
         return view('admin.role.create_update',compact('roles','admin'));
     }
 
@@ -86,6 +88,7 @@ class AdminController extends Controller
     {
         $role = $request->get('role');
         $this->repository->update1($id, $role);
+        Helper::plog("修改管理员,ID=".$id."的信息", 2);
         return redirect("admin/admin")->with(["success"=>1, "msg"=>"操作成功!"]);
     }
 

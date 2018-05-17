@@ -22,30 +22,33 @@ class CardRepository extends Repository
     // 分页
     public function limit($arr)
     {
-        extract($arr);
         $data = $this->model->with([
-            'info' => function ($query) use($tt, $not){
-                $query->select()->whereBetween('card_info.created_time', $tt,'and',$not);
+            'info' => function ($query) use($arr){
+                $query->whereBetween('created_time', $arr['tt'],'and',$arr['not']);
             },
         ])
-            ->orderBy($field, $order)
             ->offset($arr['offset'])
-            ->limit($arr['limit']);
+            ->limit($arr['limit'])
+            ->orderBy($arr['field'], $arr['order']);
 
         if ( ! empty($card_id) ) {
             $data = $data->where('card.card_id', $card_id);
         }
         $data = $data->get();
+//        dd($data);
         foreach ($data as &$v) {
-            $v['admin_name'] = $v->info->admin->admin_name;
-            $v['ip'] = $v->info->admin->ip;
+            if ( ! is_null($v->info) ){
+                $v['admin_name'] = $v->info->admin->admin_name;
+                $v['ip'] = $v->info->admin->ip;
+                $v['created_time'] = date("Y-m-d H:i:s" ,$v->info->created_time);
+                $v['card_num'] = $v->info->card_num;
+                $v['total_price'] = $v->info->total_price;
+            }
             $v['card_name'] = $v->type->name;
             $v['card_price'] = $v->type->card_price;
             $v['given'] = $v->type->given;
-            $v['created_time'] = date("Y-m-d H:i:s" ,$v->info->created_time);
-            $v['card_num'] = $v->info->card_num;
-            $v['total_price'] = $v->info->total_price;
         }
+
         return $data;
     }
 
@@ -55,7 +58,7 @@ class CardRepository extends Repository
         extract($arr);
         $count = Card::with([
             'info' => function ($query) use($tt, $not){
-                $query->select()->whereBetween('card_info.created_time', $tt,'and',$not);
+                $query->select()->whereBetween('created_time', $tt,'and',$not);
             },
         ]);
         

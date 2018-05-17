@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\TypeRequest;
 use App\Repositories\TypeRepository;
+use App\Services\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class TypeController extends Controller
+class TypeController extends BaseController
 {
     private $repository;
 
@@ -47,6 +48,7 @@ class TypeController extends Controller
         $arr = $request->options();
 //        dd($arr);
         if ($this->repository->create($arr)) {
+            Helper::plog("新增类型", 2);
             return redirect("admin/card#tab=4")->with(["success"=>1, "msg"=>"新增成功!"]);
         } else {
             return redirect()->route("card.index")->withErrors("新增失败!");
@@ -87,6 +89,7 @@ class TypeController extends Controller
         $arr = $request->options();
 
         if ($this->repository->update($arr, $id)) {
+            Helper::plog("修改类型--ID为".$id."的信息", 2);
             return redirect("admin/card#tab=4")->with(["success"=>1, "msg"=>"修改成功!"]);
         } else {
             return redirect()->route("card.index")->withErrors("修改失败!");

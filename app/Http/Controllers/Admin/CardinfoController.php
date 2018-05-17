@@ -23,7 +23,7 @@ class CardinfoController extends BaseController
      */
     public function index()
     {
-        return view("admin.card.list");
+        //
     }
 
     /**

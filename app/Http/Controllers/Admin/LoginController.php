@@ -7,6 +7,7 @@ use DB;
 use App\Models\Admin;
 use App\Repositories\AdminRepository;
 use Session;
+use App\Services\Helper;
 
 class LoginController extends BaseController
 {
@@ -27,7 +28,7 @@ class LoginController extends BaseController
             Session::put('admin_id',$admin['admin_id']);
             Session::put('name',$admin['admin_name']);
             $ip = $_SERVER["REMOTE_ADDR"];
-//            plog($admin['name'].'登入成功 登入IP:');
+            Helper::plog($admin['name'].'登入成功 登入IP:'.$ip, 1);
             return redirect("admin");
         }else{
             return back()->withErrors('用户名或密码不正确!');
@@ -38,6 +39,7 @@ class LoginController extends BaseController
 //        plog($request->session()->get('name').'退出登入');
 //        Admin::outLogin($request->session()->get('admin_id'));
         $request->session()->flush();
+        Helper::plog(session('name').' 退出登录', 1);
         return redirect('admin/login');
     }
 }
