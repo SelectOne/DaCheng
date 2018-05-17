@@ -2,24 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\CardRequest;
 use App\Http\Requests\TypeRequest;
-use App\Repositories\CardInfoRepository;
-use App\Repositories\CardRepository;
 use App\Repositories\TypeRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CardController extends BaseController
+class TypeController extends Controller
 {
     private $repository;
 
-    /**
-     * CardController constructor.
-     */
-    public function __Construct(CardRepository $cardRepository)
+    public function __Construct(TypeRepository $typeRepository)
     {
-        $this->repository = $cardRepository;
+        $this->repository = $typeRepository;
     }
 
     /**
@@ -27,10 +21,9 @@ class CardController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TypeRepository $typeRepository)
+    public function index()
     {
-        $items = $typeRepository->all();
-        return view("admin.card.index", compact("items"));
+        //
     }
 
     /**
@@ -45,14 +38,19 @@ class CardController extends BaseController
 
     /**
      * Store a newly created resource in storage.
-     * @param CardRequest $request
+     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CardRequest $request, CardInfoRepository $infoRepository)
+    public function store(TypeRequest $request)
     {
-        $data = $request->options();
-        $this->repository->creatCard($data);
-        return redirect()->route("card.index")->with(['code'=>1, 'msg'=>"添加成功"]);
+        $arr = $request->options();
+//        dd($arr);
+        if ($this->repository->create($arr)) {
+            return redirect("admin/card#tab=4")->with(["success"=>1, "msg"=>"新增成功!"]);
+        } else {
+            return redirect()->route("card.index")->withErrors("新增失败!");
+        }
     }
 
     /**
@@ -84,16 +82,22 @@ class CardController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TypeRequest $request, $id)
     {
-        //
+        $arr = $request->options();
+
+        if ($this->repository->update($arr, $id)) {
+            return redirect("admin/card#tab=4")->with(["success"=>1, "msg"=>"修改成功!"]);
+        } else {
+            return redirect()->route("card.index")->withErrors("修改失败!");
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return array
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
@@ -102,26 +106,5 @@ class CardController extends BaseController
         } else {
             return json_encode(['code'=>0,'msg'=>'删除失败']);
         }
-    }
-
-    // 会员卡数据
-    public function getData(CardRequest $request)
-    {
-        $arr = $request->filter();
-        return parent::TableApi($arr, $this->repository);
-    }
-
-    // 库存数据
-    public function getData1(Request $request, CardInfoRepository $repository)
-    {
-        $arr = $request->all();
-        return parent::TableApi($arr, $repository);
-    }
-
-    //类型管理
-    public function getData2(Request $request, TypeRepository $repository)
-    {
-        $arr = $request->all();
-        return parent::TableApi($arr, $repository);
     }
 }

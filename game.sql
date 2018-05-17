@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50553
+Source Server         : localhost_3306
+Source Server Version : 50719
 Source Host           : localhost:3306
 Source Database       : game
 
 Target Server Type    : MYSQL
-Target Server Version : 50553
+Target Server Version : 50719
 File Encoding         : 65001
 
-Date: 2018-05-16 20:23:08
+Date: 2018-05-17 00:45:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,6 +48,7 @@ CREATE TABLE `gm_card` (
   `card_id` varchar(255) NOT NULL,
   `type_id` tinyint(4) NOT NULL COMMENT '实卡类型',
   `card_info_id` tinyint(4) NOT NULL COMMENT '实卡信息ID',
+  `password` varchar(255) NOT NULL,
   `is_used` tinyint(1) NOT NULL DEFAULT '0' COMMENT '实卡状态  0:未使用   1:已使用',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
@@ -55,26 +56,26 @@ CREATE TABLE `gm_card` (
 -- ----------------------------
 -- Records of gm_card
 -- ----------------------------
-INSERT INTO `gm_card` VALUES ('1', 'VIP1000001', '1', '1', '0');
-INSERT INTO `gm_card` VALUES ('2', 'VIP1000002', '2', '2', '0');
-INSERT INTO `gm_card` VALUES ('3', 'A469780031', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('4', 'A469780032', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('5', 'A469780033', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('6', 'A469780034', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('7', 'A469780035', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('8', 'A469780036', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('9', 'A469780037', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('10', 'A469780038', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('11', 'A469780039', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('12', 'A469801001', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('13', 'A469801002', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('14', 'A469801003', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('15', 'A469801004', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('16', 'A469801005', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('17', 'A469801006', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('18', 'A469801007', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('19', 'A469801008', '3', '1', '0');
-INSERT INTO `gm_card` VALUES ('20', 'A469801009', '3', '1', '0');
+INSERT INTO `gm_card` VALUES ('1', 'VIP1000001', '3', '3', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('2', 'VIP1000002', '4', '4', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('3', 'A469780031', '1', '1', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('4', 'A469780032', '1', '1', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('5', 'A469780033', '1', '1', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('6', 'A469780034', '1', '1', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('7', 'A469780035', '1', '1', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('8', 'A469780036', '1', '1', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('9', 'A469780037', '1', '1', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('10', 'A469780038', '1', '1', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('11', 'A469780039', '1', '1', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('12', 'A469801001', '2', '2', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('13', 'A469801002', '2', '2', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('14', 'A469801003', '2', '2', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('15', 'A469801004', '2', '2', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('16', 'A469801005', '2', '2', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('17', 'A469801006', '2', '2', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('18', 'A469801007', '2', '2', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('19', 'A469801008', '2', '2', '88888888', '0');
+INSERT INTO `gm_card` VALUES ('20', 'A469801009', '2', '2', '88888888', '0');
 
 -- ----------------------------
 -- Table structure for gm_card_info
@@ -95,10 +96,10 @@ CREATE TABLE `gm_card_info` (
 -- ----------------------------
 -- Records of gm_card_info
 -- ----------------------------
-INSERT INTO `gm_card_info` VALUES ('1', '127', '10', '50.00', '200', '2', '1526284250', '1526384250');
-INSERT INTO `gm_card_info` VALUES ('2', '127', '5', '100.00', '500', '1', '1526284250', '1526384250');
-INSERT INTO `gm_card_info` VALUES ('3', '127', '50', '500.00', '100', '2', '1526469780', '1526465272');
-INSERT INTO `gm_card_info` VALUES ('4', '127', '50', '500.00', '100', '2', '1526469801', '1526465272');
+INSERT INTO `gm_card_info` VALUES ('1', '127', '9', '90.00', '200', '2', '1526284250', '1526384250');
+INSERT INTO `gm_card_info` VALUES ('2', '127', '9', '180.00', '500', '1', '1526284250', '1526384250');
+INSERT INTO `gm_card_info` VALUES ('3', '127', '1', '500.00', '100', '2', '1526469780', '1526465272');
+INSERT INTO `gm_card_info` VALUES ('4', '127', '1', '500.00', '300', '2', '1526469801', '1526465272');
 
 -- ----------------------------
 -- Table structure for gm_log
@@ -141,6 +142,7 @@ CREATE TABLE `gm_member` (
   `ip` char(40) NOT NULL COMMENT 'ip地址',
   `machine_ip` char(30) NOT NULL COMMENT '机器码',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '状态  0:正常  1:冻结账户',
+  `card_use` tinyint(4) NOT NULL DEFAULT '0' COMMENT '使用实卡次数',
   `create_time` char(11) NOT NULL COMMENT '注册时间',
   `login_time` char(11) DEFAULT NULL COMMENT '上次登录时间',
   PRIMARY KEY (`id`)
@@ -149,17 +151,17 @@ CREATE TABLE `gm_member` (
 -- ----------------------------
 -- Records of gm_member
 -- ----------------------------
-INSERT INTO `gm_member` VALUES ('10001', '10001', '1554525252', '风清扬', '', '0', '张三', '1', '9999', '100', '1', '2', '1', '192.168.0.1', '192.168.0.2', '1', '1525663985', '1525663679');
-INSERT INTO `gm_member` VALUES ('10002', '10002', '12365654566', '剑来', '', '10001', '李淳罡', '1', '8911', '66', '3', '3', '3', '192.168.0.1', '192.168.0.2', '0', '1525663582', '1525663681');
-INSERT INTO `gm_member` VALUES ('10003', '10003', '12399654566', '陆地剑仙', '', '10001', '王五', '1', '6666', '100', '2', '3', '6', '192.168.0.1', '192.168.0.3', '0', '1525663999', '1525663697');
-INSERT INTO `gm_member` VALUES ('10004', '10004', '12375654766', '令狐冲', '', '0', '李四', '1', '7580', '0', '1', '2', '10', '192.168.0.1', '192.168.0.3', '0', '1525664256', '1525664216');
-INSERT INTO `gm_member` VALUES ('10005', '10005', '1554525252', '乔帮主', '', '0', '乔峰', '1', '9999', '100', '1', '2', '1', '192.168.0.1', '192.168.0.4', '1', '1525663679', '1525664012');
-INSERT INTO `gm_member` VALUES ('10006', '10006', '12365654566', '独孤求败', '', '0', 'jake', '1', '8911', '66', '3', '3', '3', '192.168.0.1', '192.168.0.4', '0', '1525663781', '1525664045');
-INSERT INTO `gm_member` VALUES ('10007', '10007', '12399654566', 'joffery', '', '0', 'lily', '0', '6666', '100', '2', '3', '6', '192.168.0.1', '192.168.0.1', '0', '1525664212', '1525664116');
-INSERT INTO `gm_member` VALUES ('10008', '10008', '12375654766', '啥名字', '', '0', '不知', '1', '7580', '0', '1', '2', '10', '192.168.0.1', '192.168.0.1', '0', '1525664001', '1525664186');
-INSERT INTO `gm_member` VALUES ('10009', '10009', '15225453552', '哈哈', '', '0', '哈哈哈', '0', '0', '0', '1', '1', '1', '192.168.0.2', '192.168.0.1', '0', '1525664009', '1525663423');
-INSERT INTO `gm_member` VALUES ('100010', '100010', '12195652366', '十', '', '0', 'ten', '1', '0', '0', '1', '1', '1', '192.168.0.2', '192.168.0.3', '1', '1525664009', '1525663562');
-INSERT INTO `gm_member` VALUES ('100011', '100011', '12199852366', '十一', '', '0', 'eleven', '1', '10', null, '1', '1', '1', '192.168.0.2', '192.168.0.2', '0', '1525663645', '1525663426');
+INSERT INTO `gm_member` VALUES ('10001', '10001', '1554525252', '风清扬', '', '0', '张三', '1', '9999', '100', '1', '2', '1', '192.168.0.1', '192.168.0.2', '1', '0', '1525663985', '1525663679');
+INSERT INTO `gm_member` VALUES ('10002', '10002', '12365654566', '剑来', '', '10001', '李淳罡', '1', '8911', '66', '3', '3', '3', '192.168.0.1', '192.168.0.2', '0', '0', '1525663582', '1525663681');
+INSERT INTO `gm_member` VALUES ('10003', '10003', '12399654566', '陆地剑仙', '', '10001', '王五', '1', '6666', '100', '2', '3', '6', '192.168.0.1', '192.168.0.3', '0', '0', '1525663999', '1525663697');
+INSERT INTO `gm_member` VALUES ('10004', '10004', '12375654766', '令狐冲', '', '0', '李四', '1', '7580', '0', '1', '2', '10', '192.168.0.1', '192.168.0.3', '0', '0', '1525664256', '1525664216');
+INSERT INTO `gm_member` VALUES ('10005', '10005', '1554525252', '乔帮主', '', '0', '乔峰', '1', '9999', '100', '1', '2', '1', '192.168.0.1', '192.168.0.4', '1', '0', '1525663679', '1525664012');
+INSERT INTO `gm_member` VALUES ('10006', '10006', '12365654566', '独孤求败', '', '0', 'jake', '1', '8911', '66', '3', '3', '3', '192.168.0.1', '192.168.0.4', '0', '0', '1525663781', '1525664045');
+INSERT INTO `gm_member` VALUES ('10007', '10007', '12399654566', 'joffery', '', '0', 'lily', '0', '6666', '100', '2', '3', '6', '192.168.0.1', '192.168.0.1', '0', '0', '1525664212', '1525664116');
+INSERT INTO `gm_member` VALUES ('10008', '10008', '12375654766', '啥名字', '', '0', '不知', '1', '7580', '0', '1', '2', '10', '192.168.0.1', '192.168.0.1', '0', '0', '1525664001', '1525664186');
+INSERT INTO `gm_member` VALUES ('10009', '10009', '15225453552', '哈哈', '', '0', '哈哈哈', '0', '0', '0', '1', '1', '1', '192.168.0.2', '192.168.0.1', '0', '0', '1525664009', '1525663423');
+INSERT INTO `gm_member` VALUES ('100010', '100010', '12195652366', '十', '', '0', 'ten', '1', '0', '0', '1', '1', '1', '192.168.0.2', '192.168.0.3', '1', '0', '1525664009', '1525663562');
+INSERT INTO `gm_member` VALUES ('100011', '100011', '12199852366', '十一', '', '0', 'eleven', '1', '10', null, '1', '1', '1', '192.168.0.2', '192.168.0.2', '0', '0', '1525663645', '1525663426');
 
 -- ----------------------------
 -- Table structure for gm_migrations

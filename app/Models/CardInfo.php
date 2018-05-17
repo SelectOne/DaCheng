@@ -15,4 +15,10 @@ class CardInfo extends Model
     {
         return $this->belongsTo("App\Models\Admin", "admin_id", "admin_id");
     }
+
+    public function card()
+    {
+        return $this->hasMany("App\Models\Card", "card_info_id", "id");
+    }
+
 }

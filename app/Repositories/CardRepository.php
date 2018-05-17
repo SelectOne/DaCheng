@@ -28,6 +28,7 @@ class CardRepository extends Repository
                 $query->select()->whereBetween('card_info.created_time', $tt,'and',$not);
             },
         ])
+            ->orderBy($field, $order)
             ->offset($arr['offset'])
             ->limit($arr['limit']);
 
@@ -40,9 +41,9 @@ class CardRepository extends Repository
             $v['ip'] = $v->info->admin->ip;
             $v['card_name'] = $v->type->name;
             $v['card_price'] = $v->type->card_price;
+            $v['given'] = $v->type->given;
             $v['created_time'] = date("Y-m-d H:i:s" ,$v->info->created_time);
             $v['card_num'] = $v->info->card_num;
-            $v['given'] = $v->info->given;
             $v['total_price'] = $v->info->total_price;
         }
         return $data;
@@ -64,6 +65,7 @@ class CardRepository extends Repository
         return $count->count();
     }
 
+    // 生成实卡
     public function creatCard($data)
     {
         DB::transaction(function () use($data){
@@ -73,12 +75,15 @@ class CardRepository extends Repository
                 list($a,$b)=explode(' ', microtime());
                 $unquid = substr(str_replace(".", "", $b.$a), 4, $data['card_length']-2);
                 $card_id = $data['card_first'].$unquid;
+                $password = substr(md5($unquid), '8', '10');
                 DB::table('card')->insert([
                     'card_id' => $card_id.$i,
                     'type_id' => $data['type_id'],
                     'card_info_id' => $id,
+                    'passwprd' > $password,
                 ]);
             }
         });
     }
+
 }

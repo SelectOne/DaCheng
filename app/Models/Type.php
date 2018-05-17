@@ -8,5 +8,5 @@ class Type extends Model
 {
     protected $table = "type";
     public $timestamps = false;
-    protected $fillable = ['id', 'name'];
+    protected $fillable = ['id', 'name', 'card_price', 'given'];
 }

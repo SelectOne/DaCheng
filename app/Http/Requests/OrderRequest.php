@@ -44,6 +44,11 @@ class OrderRequest extends FormRequest
                 $arr['sn'] = $id;
                 break;
         }
+        if ( ! array_key_exists('field', $arr) && ! array_key_exists('order', $arr) )
+        {
+            $arr['field'] = "order_id";
+            $arr['order'] = "desc";
+        }
         $arr['type'] = $this->has('type')? $this->get('type'): "";
         $arr['status'] = $this->has('status')? $this->get('status'): "";
         $time = $this->has('created_time')? $this->get('created_time'): "";

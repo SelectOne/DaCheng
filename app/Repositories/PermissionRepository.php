@@ -21,7 +21,12 @@ class PermissionRepository extends Repository
     public function limit($arr)
     {
         $arr['offset'] = ( $arr['page']-1 ) * $arr['limit'];
-        $data = $this->model()::offset($arr['offset'])->limit($arr['limit'])->get();
+        if ( ! array_key_exists('field', $arr) && ! array_key_exists('order', $arr) )
+        {
+            $arr['field'] = "id";
+            $arr['order'] = "desc";
+        }
+        $data = $this->model->orderBy($arr['field'], $arr['order'])->offset($arr['offset'])->limit($arr['limit'])->get();
         foreach ($data as $v) {
             $v['created_time'] = date("Y-m-d H:i:s", $v['created_time']);
             $v['updated_time'] = date("Y-m-d H:i:s", $v['updated_time']);
