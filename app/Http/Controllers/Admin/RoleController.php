@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Repositories\PermissionRepository;
+use App\Services\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
@@ -23,6 +24,7 @@ class RoleController extends Controller
      */
     public function index()
     {
+        Helper::plog("查看角色列表", 1);
         return view('admin.role.index');
     }
 
@@ -48,6 +50,7 @@ class RoleController extends Controller
         $data = $request->only("name", "display_name", 'description');
         $permissions = $request->get("permission");
         $this->repository->create1($data, $permissions);
+        Helper::plog("新增角色", 2);
         return redirect("admin/role")->with(["success"=>1, "msg"=>"操作成功!"]);
     }
     /**
@@ -90,7 +93,7 @@ class RoleController extends Controller
         $permissions = $request->get("permission");
 //        dd($permissions);
         $this->repository->update1($id, $data, $permissions);
-
+        Helper::plog("修改角色权限,ID=".$id, 2);
         return redirect("admin/role")->with(["success"=>1, "msg"=>"操作成功!"]);
     }
     /**
@@ -102,6 +105,7 @@ class RoleController extends Controller
     public function destroy($id)
     {
         if ($this->repository->delete($id)) {
+            Helper::plog("删除角色ID=".$id, 2);
             return json_encode(['code'=>1,'msg'=>'删除成功']);
         } else {
             return json_encode(['code'=>0,'msg'=>'删除失败']);

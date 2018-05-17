@@ -185,6 +185,56 @@
                // console.log(data.elem); //得到当前的Tab大容器
                 location.hash = 'tab='+ this.getAttribute('lay-id');
 
+                if (data.index == 2) {
+                    // 库存
+                    var table2 = table.render({
+                        elem: '#demo1'
+                        , url: '{{ route("cardinfo.getData") }}' //数据接口
+                        , method: 'get'
+                        , width: 1640
+                        , height: 501
+                        , page: true //开启分页
+                        , cols: [[ //表头
+                            {type: 'checkbox', fixed: 'left'}
+                            , {field: 'card_name', title: '会员卡',}
+                            , {field: 'card_num', title: '库存'}
+                            , {field: 'used', title: '已充值'}
+                            , {field: 'not_used', title: '未充值'}
+                            , {field: 'expire', title: '已过期'}
+                            , {field: 'total_price', title: '总金额'}
+                            , {field: 'total_given', title: '总金币'}
+                            , /*{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}*/
+                        ]]
+                    });
+
+                    //排序
+                    table.on('sort(test1)', function(obj){
+                        table.reload('demo1', {
+                            initSort: obj
+                            ,where: {
+                                field: obj.field //排序字段
+                                ,order: obj.type //排序方式
+                            }
+                        });
+                    });
+                } else if(data.index == 3) {
+                    // 类型
+                    var table3 = table.render({
+                        elem: '#demo2'
+                        , url: '{{ route("type.getData") }}' //数据接口
+                        , method: 'get'
+                        , width: 1640
+                        , height: 501
+                        , page: true //开启分页
+                        , cols: [[ //表头
+                            {type: 'checkbox', fixed: 'left'}
+                            , {field: 'name', title: '实卡名称',}
+                            , {field: 'card_price', title: '实卡价格', sort: true}
+                            , {field: 'given', title: '赠送金币',sort: true}
+                            , {fixed: 'right', width:178, align:'center', toolbar: '#barDemo2'}
+                        ]]
+                    });
+                }
 
             });
 
@@ -275,54 +325,9 @@
                     });
                 }
             });
-            // 库存
-            var table2 = table.render({
-                elem: '#demo1'
-                , url: '{{ route("cardinfo.getData") }}' //数据接口
-                , method: 'get'
-                , width: 1640
-                , height: 501
-                , page: true //开启分页
-                , cols: [[ //表头
-                    {type: 'checkbox', fixed: 'left'}
-                    , {field: 'card_name', title: '会员卡',}
-                    , {field: 'card_num', title: '库存', sort: true}
-                    , {field: 'used', title: '已充值',sort: true}
-                    , {field: 'not_used', title: '未充值'}
-                    , {field: 'expire', title: '已过期'}
-                    , {field: 'total_price', title: '总金额', sort: true}
-                    , {field: 'total_given', title: '总金币', sort: true}
-                    , /*{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}*/
-                ]]
-            });
 
-            //排序
-            table.on('sort(test1)', function(obj){
-                table.reload('demo1', {
-                    initSort: obj
-                    ,where: {
-                        field: obj.field //排序字段
-                        ,order: obj.type //排序方式
-                    }
-                });
-            });
 
-            // 类型
-            var table3 = table.render({
-                elem: '#demo2'
-                , url: '{{ route("type.getData") }}' //数据接口
-                , method: 'get'
-                , width: 1640
-                , height: 501
-                , page: true //开启分页
-                , cols: [[ //表头
-                    {type: 'checkbox', fixed: 'left'}
-                    , {field: 'name', title: '实卡名称',}
-                    , {field: 'card_price', title: '实卡价格', sort: true}
-                    , {field: 'given', title: '赠送金币',sort: true}
-                    , {fixed: 'right', width:178, align:'center', toolbar: '#barDemo2'}
-                ]]
-            });
+
 
             //排序
             table.on('sort(test2)', function(obj){

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\RestrictRequest;
 use App\Repositories\RestrictRepository;
+use App\Services\Helper;
 use Illuminate\Http\Request;
 
 class RestrictController extends BaseController
@@ -21,6 +22,7 @@ class RestrictController extends BaseController
      */
     public function index()
     {
+        Helper::plog("查看限制列表", 1);
         return view("admin.restrict.index");
     }
 
@@ -45,6 +47,7 @@ class RestrictController extends BaseController
         $arr = $request->options();
 
         if ($this->repository->create($arr)) {
+            Helper::plog("新建限制地址", 2);
             return redirect("admin/restrict/index")->with(["success"=>1, "msg"=>"操作成功!"]);
         } else {
             return redirect("admin/restrict/index")->withErrors("操作失败!");
@@ -86,6 +89,7 @@ class RestrictController extends BaseController
         $arr = $request->options();
 
         if ($this->repository->update($arr, $arr['id'])) {
+            Helper::plog("修改限制地址ID=".$arr['id'], 2);
             return redirect("admin/restrict/index")->with(["success"=>1, "msg"=>"操作成功!"]);
         } else {
             return redirect("admin/restrict/index")->withErrors("操作失败!");
@@ -103,6 +107,7 @@ class RestrictController extends BaseController
         $id = $request->get("id");
 
         if ($this->repository->delete($id)) {
+            Helper::plog("删除限制地址ID=".$id, 2);
             echo "删除成功!";
         } else {
             echo "删除失败!";

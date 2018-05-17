@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\OrderRequest;
 use App\Repositories\OrderRepository;
+use App\Services\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -22,6 +23,7 @@ class OrderController extends BaseController
      */
     public function index()
     {
+        Helper::plog("查看订单列表",1);
         return view("admin.order.index");
     }
 

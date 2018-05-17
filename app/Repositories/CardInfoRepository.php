@@ -46,4 +46,34 @@ class CardInfoRepository extends Repository
         $count = $this->model->count();
         return $count;
     }
+
+    /*public function limit1($arr)
+    {
+        $data = $this->model->whereBetween('created_time', $arr['tt'], 'and', $arr['not'])->get();
+
+        foreach ($data as $v) {
+
+            $data[] = $v->card()->skip($arr['offset'])->take($arr['limit'])
+            ->orderBy($arr['field'], $arr['order'])->get();
+            foreach ($data as $value)
+            {
+                $value['total_price'] = $v['total_price'];
+            }
+        }
+
+//        dd($data);
+        return $data;
+    }
+
+    // 获取所有记录总数
+    public function getCount1($arr)
+    {
+        extract($arr);
+        $count = $this->model->whereBetween('card_info.created_time', $arr['tt']);
+
+        if ( ! empty($card_id) ) {
+            $count = $count->where('card.card_id', $card_id);
+        }
+        return $count->count();
+    }*/
 }
