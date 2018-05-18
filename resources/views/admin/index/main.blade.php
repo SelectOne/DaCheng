@@ -78,6 +78,18 @@
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="7" date-url="{{route('card.index')}}">实卡管理</a></dd>
                     </dl>
                 </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">日志系统</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="8" date-url="{{route("log.index")}}">日志列表</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">数据分析</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="9" date-url="{{ url("admin/order/amount") }}">充值统计</a></dd>
+                    </dl>
+                </li>
                 <li class="layui-nav-item"><a href="">发布商品</a></li>
             </ul>
         </div>

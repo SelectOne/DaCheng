@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Repositories\RoleRepository;
 
-class RoleController extends Controller
+class RoleController extends BaseController
 {
     private $repository;
 
@@ -122,8 +122,6 @@ class RoleController extends Controller
     {
         $arr = $request->all();
 //        dd($arr);
-        $data = $this->repository->limit($arr);
-        $count = $this->repository->getCount($arr);
-        return json_encode(['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data]);
+        return parent::TableApi($arr, $this->repository);
     }
 }

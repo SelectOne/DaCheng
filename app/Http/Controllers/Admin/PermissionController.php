@@ -8,7 +8,7 @@ use App\Services\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class PermissionController extends Controller
+class PermissionController extends BaseController
 {
     private $repository;
 
@@ -123,8 +123,6 @@ class PermissionController extends Controller
     {
         $arr = $request->all();
 //        dd($arr);
-        $data = $this->repository->limit($arr);
-        $count = $this->repository->getCount($arr);
-        return json_encode(['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data]);
+        return parent::TableApi($arr, $this->repository);
     }
 }

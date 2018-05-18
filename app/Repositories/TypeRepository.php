@@ -26,12 +26,9 @@ class TypeRepository extends Repository
             $arr['field'] = "id";
             $arr['order'] = "desc";
         }
+        $count = $this->model->count();
         $data = $this->model->orderBy($arr['field'], $arr['order'])->offset($arr['offset'])->limit($arr['limit'])->get();
+        $data['count'] = $count;
         return $data;
-    }
-
-    public function getCount()
-    {
-        return $this->model->count();
     }
 }

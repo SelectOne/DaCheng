@@ -26,20 +26,14 @@ class PermissionRepository extends Repository
             $arr['field'] = "id";
             $arr['order'] = "desc";
         }
+        $count = $this->model->count();
         $data = $this->model->orderBy($arr['field'], $arr['order'])->offset($arr['offset'])->limit($arr['limit'])->get();
         foreach ($data as $v) {
             $v['created_time'] = date("Y-m-d H:i:s", $v['created_time']);
             $v['updated_time'] = date("Y-m-d H:i:s", $v['updated_time']);
         }
+        $data['count'] = $count;
         return $data;
-    }
-
-    // 获取所有记录总数
-    public function getCount($arr)
-    {
-        $count = $this->model()::count();
-
-        return $count;
     }
 
     public function getAll()

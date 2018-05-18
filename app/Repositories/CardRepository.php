@@ -26,15 +26,13 @@ class CardRepository extends Repository
             'info' => function ($query) use($arr){
                 $query->whereBetween('created_time', $arr['tt'],'and',$arr['not']);
             },
-        ])
-            ->offset($arr['offset'])
-            ->limit($arr['limit'])
-            ->orderBy($arr['field'], $arr['order']);
+        ]);
 
         if ( ! empty($card_id) ) {
             $data = $data->where('card.card_id', $card_id);
         }
-        $data = $data->get();
+        $count = $data->count();
+        $data = $data->offset($arr['offset'])->limit($arr['limit'])->orderBy($arr['field'], $arr['order'])->get();
 //        dd($data);
         foreach ($data as &$v) {
             if ( ! is_null($v->info) ){
@@ -48,24 +46,8 @@ class CardRepository extends Repository
             $v['card_price'] = $v->type->card_price;
             $v['given'] = $v->type->given;
         }
-
+        $data['count'] = $count;
         return $data;
-    }
-
-    // 获取所有记录总数
-    public function getCount($arr)
-    {
-        extract($arr);
-        $count = Card::with([
-            'info' => function ($query) use($tt, $not){
-                $query->select()->whereBetween('created_time', $tt,'and',$not);
-            },
-        ]);
-        
-        if ( ! empty($card_id) ) {
-            $count = $count->where('card.card_id', $card_id);
-        }
-        return $count->count();
     }
 
     // 生成实卡

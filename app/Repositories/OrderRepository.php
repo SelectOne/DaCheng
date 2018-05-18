@@ -22,10 +22,7 @@ class OrderRepository extends Repository
     {
 //        dd($arr);
         extract($arr);
-        $data = $this->model->whereBetween('created_time', $tt,'and',$not)
-                              ->orderBy($field, $order)
-                              ->offset($arr['offset'])
-                              ->limit($arr['limit']);
+        $data = $this->model->whereBetween('created_time', $tt,'and',$not);
         if ( isset($mid) ) {
             $data = $data->where('mid', $mid);
         }
@@ -41,34 +38,19 @@ class OrderRepository extends Repository
         if ( $status != "" ) {
             $data = $data->where('status', $status);
         }
+        $count = $data->orderBy($field, $order)->offset($arr['offset'])->limit($arr['limit'])->count();
         $data = $data->get();
         foreach ($data as $v) {
             $v['created_time'] = date("Y-m-d H:i:s", $v['created_time']);
         }
+        $data['count'] = $count;
         return $data;
     }
 
-    // 获取所有记录总数
-    public function getCount($arr)
+    public function amount()
     {
-        extract($arr);
-        $count = $this->model->whereBetween('created_time', $tt,'and',$not);
-        if ( isset($mid) ) {
-            $count = $count->where('mid', $mid);
-        }
-        if ( isset($game_id)) {
-            $count = $count->where('game_id', $game_id);
-        }
-        if ( isset($sn) ) {
-            $count = $count->where('sn', $sn);
-        }
-        if ( $type != "") {
-            $count = $count->where('type', $type);
-        }
-        if ( $status != "" ) {
-            $count = $count->where('status', $status);
-        }
-        $count = $count->count();
-        return $count;
+        $data = $this->model->where("status", 1)->sum('amount');
+
     }
+
 }

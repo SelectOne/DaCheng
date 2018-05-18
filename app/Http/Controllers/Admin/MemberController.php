@@ -36,9 +36,7 @@ class MemberController extends BaseController
     {
         $arr = $request->all();
 //        dd($arr);
-        $members = $this->MRepository->limit($arr);
-        $count   = $this->MRepository->getCount($arr);
-        return json_encode(['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$members]);
+        return parent::TableApi($arr, $this->MRepository);
     }
 
     /**

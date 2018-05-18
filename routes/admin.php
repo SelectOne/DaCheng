@@ -54,7 +54,7 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     // OrderController
     Route::get('order/index', 'OrderController@index');
     Route::get('order/getData', 'OrderController@getData');
-    Route::get('order/test', 'OrderController@test');
+    Route::get('order/amount', 'OrderController@getAmount');
 
     // CardController
     Route::resource('card','CardController');
@@ -64,10 +64,13 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('getPrice/{id}', function ($id, \App\Models\Type $type){
         return $type->where('id', $id)->value("card_price");
     })->name("type.getPrice");
-    Route::put('type/{$id}', 'CardController@getData')->name("type.update");
+//    Route::put('type/{$id}', 'CardController@getData')->name("type.update");
 //    Route::post('type', 'CardController@typeStore')->name("type.store");
     // TypeController
     Route::resource('type','TypeController');
 //    Route::resource('cardinfo','CardinfoController');
 //    Route::get('getCard', 'CardinfoController@getData')->name("cardinfo.getData");
+
+    Route::resource('log','LogController');
+    Route::get('getLog', 'LogController@getData')->name("log.getData");
 });

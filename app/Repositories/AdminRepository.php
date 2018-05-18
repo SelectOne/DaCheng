@@ -32,6 +32,7 @@ class AdminRepository extends Repository{
             $arr['field'] = "admin_id";
             $arr['order'] = "desc";
         }
+        $count = $this->model->count();
         $data = $this->model->offset($arr['offset'])->limit($arr['limit'])->orderBy($arr['field'], $arr['order'])->get();
         foreach ($data as $v) {
             $v['rolesID'] = $app->getRoleID($v['admin_id']);
@@ -45,15 +46,9 @@ class AdminRepository extends Repository{
             $v['created_time'] = date("Y-m-d H:i:s", $v['created_time']);
             $v['updated_time'] = date("Y-m-d H:i:s", $v['updated_time']);
         }
+//        dd($data);
+        $data['count'] = $count;
         return $data;
-    }
-
-    // 获取所有记录总数
-    public function getCount($arr)
-    {
-        $count = $this->model->count();
-
-        return $count;
     }
 
     public function first($id)
@@ -91,5 +86,13 @@ class AdminRepository extends Repository{
                 }
             }
         });
+    }
+
+    /**
+     * @return mixed|void
+     */
+    public function getAll()
+    {
+        return $this->model->pluck("admin_name", "admin_id");
     }
 }

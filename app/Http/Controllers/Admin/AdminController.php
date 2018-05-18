@@ -9,7 +9,7 @@ use App\Services\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AdminController extends Controller
+class AdminController extends BaseController
 {
     private $repository;
 
@@ -112,7 +112,8 @@ class AdminController extends Controller
     {
         $arr = $request->all();
         $data = $this->repository->limit($arr, $roleRepository);
-        $count = $this->repository->getCount($arr);
+        $count = $data['count'];
+        unset($data['count']);
         return json_encode(['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data]);
     }
 }

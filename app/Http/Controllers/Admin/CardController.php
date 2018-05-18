@@ -109,10 +109,14 @@ class CardController extends BaseController
     }
 
     // 会员卡数据
-    public function getData(CardRequest $request)
+    public function getData(CardRequest $request, CardInfoRepository $repository)
     {
         $arr = $request->filter();
         return parent::TableApi($arr, $this->repository);
+//        $data = $repository->limit1($arr);
+//        $count = $data['count'];
+//        unset($data['count']);
+//        return json_encode(['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data]);
     }
 
     // 库存数据

@@ -23,7 +23,8 @@ class BaseController extends Controller
     public function TableApi( $arr, $repository )
     {
         $data = $repository->limit($arr);
-        $count = $repository->getCount($arr);
+        $count = $data['count'];
+        unset($data['count']);
         return ['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data];
     }
 }

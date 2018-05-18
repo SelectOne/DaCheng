@@ -27,6 +27,7 @@ class CardInfoRepository extends Repository
             $arr['field'] = "id";
             $arr['order'] = "desc";
         }
+        $count = $this->model->count();
         $data = $this->model->orderBy($arr['field'], $arr['order'])->offset($arr['offset'])->limit($arr['limit'])->get();
         foreach ($data as &$v) {
             foreach ($v->card as $item) {
@@ -38,42 +39,28 @@ class CardInfoRepository extends Repository
             $v['expire'] = $v->card->where('expire_time', '<', time())->count();
             $v['total_given'] = $v['card_num'] * $v['given'];
         }
+        $data['count'] = $count;
         return $data;
     }
 
-    public function getCount()
+    public function limit1($arr)
     {
-        $count = $this->model->count();
-        return $count;
-    }
-
-    /*public function limit1($arr)
-    {
-        $data = $this->model->whereBetween('created_time', $arr['tt'], 'and', $arr['not'])->get();
+//        dd($arr);
+        $data = $this->model->with('card')->whereBetween('created_time', $arr['tt'], 'and', $arr['not'])->get();
+        dd($data);
+        $count = $data->count();
+        $data= $data->skip($arr['offset'])->take($arr['limit'])->orderBy($arr['field'], $arr['order'])->get();
 
         foreach ($data as $v) {
-
-            $data[] = $v->card()->skip($arr['offset'])->take($arr['limit'])
-            ->orderBy($arr['field'], $arr['order'])->get();
-            foreach ($data as $value)
+            $v = $v->card;
+            dd($v);
+            /*foreach ($data as $value)
             {
                 $value['total_price'] = $v['total_price'];
-            }
+            }*/
         }
-
+        $data['count'] = $count;
 //        dd($data);
         return $data;
     }
-
-    // 获取所有记录总数
-    public function getCount1($arr)
-    {
-        extract($arr);
-        $count = $this->model->whereBetween('card_info.created_time', $arr['tt']);
-
-        if ( ! empty($card_id) ) {
-            $count = $count->where('card.card_id', $card_id);
-        }
-        return $count->count();
-    }*/
 }

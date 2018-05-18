@@ -22,16 +22,16 @@ class RestrictRepository extends Repository
     {
 
         extract($arr);
-        $data = $this->model()::offset($offset)->limit($arr['limit'])->orderBy($field, $order);
         if ($type) {
-            $data = $data->where('ip', 'like',"%$ip%");
+            $data = $this->model->where('ip', 'like',"%$ip%");
 
         }else {
             if ($ip) {
-                $data = $data->where('ip', $ip);
+                $data = $this->model->where('ip', $ip);
             }
         }
-        $data = $data->get();
+        $count = $this->model->count();
+        $data = $this->model->offset($offset)->limit($arr['limit'])->orderBy($field, $order)->get();
 
         foreach ($data as $v) {
             if ($v['limit_time'] == "0") {
@@ -42,23 +42,7 @@ class RestrictRepository extends Repository
 
             $v['create_time'] = date("Y-m-d H:i:s", $v['create_time']);
         }
+        $data['count'] = $count;
         return $data;
-    }
-
-    // 获取所有记录总数
-    public function getCount($arr)
-    {
-        extract($arr);
-        if (!empty($type)) {
-            $count = $this->model()::where('ip', 'like',"%$ip%")->count();
-        }else {
-            if ($ip) {
-                $count = $this->model()::where('ip', $ip)->count();
-            } else{
-                $count = $this->model()::count();
-            }
-        }
-
-        return $count;
     }
 }

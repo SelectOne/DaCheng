@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
-Source Server Version : 50719
+Source Server         : localhost
+Source Server Version : 50553
 Source Host           : localhost:3306
 Source Database       : game
 
 Target Server Type    : MYSQL
-Target Server Version : 50719
+Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2018-05-17 00:45:34
+Date: 2018-05-18 10:25:52
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -86,7 +86,6 @@ CREATE TABLE `gm_card_info` (
   `admin_id` tinyint(2) NOT NULL COMMENT '管理员ID',
   `card_num` tinyint(4) NOT NULL COMMENT '实卡数量',
   `total_price` decimal(10,2) NOT NULL COMMENT '总金额',
-  `given` int(11) NOT NULL COMMENT '每张卡赠送金币',
   `max_use` tinyint(2) NOT NULL COMMENT '单个玩家最多使用次数',
   `created_time` char(11) NOT NULL COMMENT '生成时间',
   `expire_time` char(11) NOT NULL COMMENT '过期时间  ',
@@ -96,10 +95,10 @@ CREATE TABLE `gm_card_info` (
 -- ----------------------------
 -- Records of gm_card_info
 -- ----------------------------
-INSERT INTO `gm_card_info` VALUES ('1', '127', '9', '90.00', '200', '2', '1526284250', '1526384250');
-INSERT INTO `gm_card_info` VALUES ('2', '127', '9', '180.00', '500', '1', '1526284250', '1526384250');
-INSERT INTO `gm_card_info` VALUES ('3', '127', '1', '500.00', '100', '2', '1526469780', '1526465272');
-INSERT INTO `gm_card_info` VALUES ('4', '127', '1', '500.00', '300', '2', '1526469801', '1526465272');
+INSERT INTO `gm_card_info` VALUES ('1', '127', '9', '90.00', '2', '1526284250', '1526384250');
+INSERT INTO `gm_card_info` VALUES ('2', '127', '9', '180.00', '1', '1526541519', '1526565982');
+INSERT INTO `gm_card_info` VALUES ('3', '127', '1', '500.00', '2', '1526469780', '1526465272');
+INSERT INTO `gm_card_info` VALUES ('4', '127', '1', '500.00', '2', '1526469801', '1526465272');
 
 -- ----------------------------
 -- Table structure for gm_log
@@ -109,17 +108,21 @@ CREATE TABLE `gm_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `admin_id` int(11) NOT NULL COMMENT '操作人id',
   `title` varchar(64) NOT NULL COMMENT '操作',
-  `module` varchar(255) DEFAULT NULL COMMENT '操作模块',
-  `url` varchar(255) DEFAULT NULL COMMENT '操作路径',
   `type` tinyint(2) NOT NULL COMMENT '类型  1:安全日志 2:操作日志 3:登录日志',
-  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `created_time` char(11) NOT NULL COMMENT '时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='安全日志表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='安全日志表';
 
 -- ----------------------------
 -- Records of gm_log
 -- ----------------------------
+INSERT INTO `gm_log` VALUES ('1', '127', '修改类型--ID为7的信息', '2', '1526541519');
+INSERT INTO `gm_log` VALUES ('2', '127', '登入成功 登入IP:::1', '1', '1526606791');
+INSERT INTO `gm_log` VALUES ('3', '127', '查看订单列表', '1', '1526606793');
+INSERT INTO `gm_log` VALUES ('4', '127', '查看实卡管理', '1', '1526607862');
+INSERT INTO `gm_log` VALUES ('5', '127', '查看用户列表', '1', '1526607926');
+INSERT INTO `gm_log` VALUES ('6', '127', '查看限制列表', '1', '1526607928');
 
 -- ----------------------------
 -- Table structure for gm_member
@@ -326,13 +329,16 @@ CREATE TABLE `gm_type` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `card_price` decimal(10,2) NOT NULL COMMENT '实卡价格',
+  `given` int(11) NOT NULL COMMENT '每张卡赠送的金币',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of gm_type
 -- ----------------------------
-INSERT INTO `gm_type` VALUES ('1', '体验卡', '10.00');
-INSERT INTO `gm_type` VALUES ('2', '青铜卡', '20.00');
-INSERT INTO `gm_type` VALUES ('3', '白金卡', '50.00');
-INSERT INTO `gm_type` VALUES ('4', '黄金卡', '100.00');
+INSERT INTO `gm_type` VALUES ('1', '体验卡', '10.00', '100');
+INSERT INTO `gm_type` VALUES ('2', '青铜卡', '20.00', '200');
+INSERT INTO `gm_type` VALUES ('3', '白金卡', '50.00', '300');
+INSERT INTO `gm_type` VALUES ('4', '黄金卡', '100.00', '500');
+INSERT INTO `gm_type` VALUES ('5', '至尊卡', '500.00', '50000');
+INSERT INTO `gm_type` VALUES ('7', '大王卡', '30.00', '3');

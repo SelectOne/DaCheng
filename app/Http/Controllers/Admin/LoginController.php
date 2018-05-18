@@ -28,7 +28,7 @@ class LoginController extends BaseController
             Session::put('admin_id',$admin['admin_id']);
             Session::put('name',$admin['admin_name']);
             $ip = $_SERVER["REMOTE_ADDR"];
-            Helper::plog($admin['name'].'登入成功 登入IP:'.$ip, 1);
+            Helper::plog($admin['name'].'登入成功 登入IP:'.$ip, 3);
             return redirect("admin");
         }else{
             return back()->withErrors('用户名或密码不正确!');
