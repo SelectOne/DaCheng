@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\OrderRequest;
+use App\Models\Order;
 use App\Repositories\OrderRepository;
 use App\Services\Helper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use DB;
 
 class OrderController extends BaseController
 {
@@ -101,6 +103,41 @@ class OrderController extends BaseController
 
     public function getAmount()
     {
+//        $time = $request->time();
+
         return view("admin.data.amount");
+    }
+
+    public function orderAmount(OrderRequest $request)
+    {
+        $time = $request->time();
+//        dd($time);
+        if ($time['not']){
+            $range = \Carbon\Carbon::now()->subDays(7);
+            $data = Order::where('created_at', '>=', $range)
+                ->groupBy('date')
+                ->get([
+                    DB::raw('Date(created_at) as date'),
+                    DB::raw('sum(amount) as value')
+                ])->toArray();
+        } else {
+            $data = Order::whereBetween('created_at', $time['tt'], 'and', $time['not'])
+                ->groupBy('date')
+                ->get([
+                    DB::raw('Date(created_at) as date'),
+                    DB::raw('sum(amount) as value')
+                ])->toArray();
+        }
+
+        $arr = [];
+        foreach ($data as $k=>$v)
+        {
+            $arr['date'][] = $v['date'];
+            $arr['value'][] = (float)$v['value'];
+            $arr['total'] = array_sum($arr['value']);
+        }
+        $data = json_encode($arr);
+//        dd($data);
+        return $data;
     }
 }

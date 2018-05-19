@@ -40,17 +40,28 @@ class OrderRepository extends Repository
         }
         $count = $data->orderBy($field, $order)->offset($arr['offset'])->limit($arr['limit'])->count();
         $data = $data->get();
-        foreach ($data as $v) {
+        /*foreach ($data as $v) {
             $v['created_time'] = date("Y-m-d H:i:s", $v['created_time']);
-        }
+        }*/
         $data['count'] = $count;
         return $data;
     }
 
-    public function amount()
+    public function amount($time)
     {
-        $data = $this->model->where("status", 1)->sum('amount');
+//        $time = $this->has("time")?$this->get("time"):"";
+//        list($start, $end) = explode("--", $time);
+//        $end = ltrim($end, " ");
 
+        $rs = $this->model->where("status", 1)->whereMonth ('created_time', 5)->get();
+        dd($rs);
+        dd($rs->whereDay ('created_time',today())->first());
+        for ($i=$time[0]; $i<$time[1]; $i+=$i*1024*60) {
+            $data[] = $rs->whereBetween('created_time', [$time[0],$time[0]+$i])->sum("amount");
+        }
+        dd($data);
+        $data = json_encode($data, JSON_UNESCAPED_UNICODE);
+        return $data;
     }
 
 }
