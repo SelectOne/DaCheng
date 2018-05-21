@@ -8,9 +8,10 @@
 
 namespace App\Repositories;
 
-use  App\Repositories\Contracts\RepositoryInterface;
-use  App\Repositories\Eloquent\Repository;
-
+use App\Models\Member;
+use App\Repositories\Contracts\RepositoryInterface;
+use App\Repositories\Eloquent\Repository;
+use DB;
 
 class MemberRepository extends Repository
 {
@@ -83,4 +84,52 @@ class MemberRepository extends Repository
         return $rs;
     }
 
+    public function register($time)
+    {
+        if ($time['not']){
+            $range = \Carbon\Carbon::now()->subDays(7);
+            $data = Member::where('created_at', '>=', $range);
+        } else {
+            $data = Member::whereBetween('created_at', $time['tt'], 'and', $time['not']);
+        }
+        $data = $data->groupBy('date')
+                     ->get([
+                         DB::raw('Date(created_at) as date'),
+                         DB::raw('count(id) as value')
+                     ])->toArray();
+        $arr = [];
+        foreach ($data as $k=>$v)
+        {
+            $arr['date'][] = $v['date'];
+            $arr['value'][] = $v['value'];
+//            $arr['total'] = array_sum($arr['value']);
+        }
+//        dd($arr);
+        return json_encode($arr);
+    }
+
+    public function total()
+    {
+        $num = $this->model->count();
+        return $num;
+    }
+
+    // 在房间玩家信息
+    public function mInRoom($arr)
+    {
+        $offset = ( $arr['page']-1 ) * $arr['limit'];
+        $room_id = array_key_exists("room_id", $arr)?$arr['room_id']:"";
+        $data = $this->model->where('status', 0);
+        if ( ! empty($room_id) ) {
+            $data = $data->where("room_id", $room_id);
+        }
+        $count = $data->count();
+        $data = $data->offset($offset)->limit($arr['limit'])->get();
+        foreach ($data as $v)
+        {
+            $v['room_name'] = $v->room->name;
+        }
+        $data['count'] = $count;
+        return $data;
+    }
 }

@@ -24,16 +24,16 @@ class MemberRequest extends FormRequest
     public function rules()
     {
         return [
-            'num' => 'required|regex:[^\d+$]',
+//            'num' => 'required|regex:[^\d+$]',
         ];
     }
 
-    public function messages(){
-        return [
-            'num.required' => '充值不能为空!',
-            'num.regex'    => '充值必须是数字!',
-        ];
-    }
+//    public function messages(){
+//        return [
+//            'num.required' => '充值不能为空!',
+//            'num.regex'    => '充值必须是数字!',
+//        ];
+//    }
 
     /*public function options(){
         $Method= $this->route()->getActionMethod();
@@ -69,4 +69,18 @@ class MemberRequest extends FormRequest
         return $arr;
     }
 
+    public function time()
+    {
+        $time = $this->has("time")?$this->get("time"):"";
+        $a['not'] = true;
+        if ($time) {
+            $arr = explode(" -- ", $time);
+            $a['tt'] = [$arr[0], $arr[1]];
+            $a['not'] = false;
+        } else {
+            $a['tt'] = ["", ""];
+        }
+//        dd($a);
+        return $a;
+    }
 }

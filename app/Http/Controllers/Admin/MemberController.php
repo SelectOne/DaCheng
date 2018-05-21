@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\MemberRequest;
 use App\Models\Member;
+use App\Repositories\RoomRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\MemberRepository as MRepository;
@@ -139,4 +140,45 @@ class MemberController extends BaseController
         }
     }
 
+    /**
+     * 每日在线玩家统计图
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function statistics()
+    {
+        $num = $this->MRepository->total();
+        return view("admin.data.register", compact("num"));
+    }
+
+    /**
+     * 每日在线玩家统计数据
+     * @param MemberRequest $request
+     * @return string
+     */
+    public function cztj(MemberRequest $request)
+    {
+//        dd('sda');
+        $time = $request->time();
+        $data = $this->MRepository->register($time);
+        return $data;
+    }
+
+    /**
+     * 在房间玩家
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function inRoom(RoomRepository $roomRepository)
+    {
+        $rooms = $roomRepository->all();
+        return view("admin.data.inRoom", compact("rooms"));
+    }
+
+    public function mInRoom(Request $request)
+    {
+        $arr = $request->all();
+        $data = $this->MRepository->mInRoom($arr);
+        $count = $data['count'];
+        unset($data['count']);
+        return ['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data];
+    }
 }

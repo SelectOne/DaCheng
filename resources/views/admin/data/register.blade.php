@@ -6,15 +6,15 @@
 <!-- 内容 -->
 @section('content')
     <fieldset class="layui-elem-field site-demo-button" style="margin-top: 10px;">
-        <legend>充值统计图</legend>
+        <legend>注册日统计图</legend>
         <div class="layui-field-box">
             <div class="layui-col-xs12">
                 {{--<form action="" method="get">--}}
                 <blockquote class="layui-elem-quote layui-quote-nm layui-form">
                     <div class="layui-inline">
-                        <label class="layui-form-label">日期时间</label>
+                        <label class="layui-form-label">注册日期</label>
                         <div class="layui-input-inline">
-                            <input type="text" name='time' class="layui-input"  id="time" placeholder="登录日期" value="{{ old('time') }}">
+                            <input type="text" name='time' class="layui-input"  id="time" placeholder="注册日期" value="{{ old('time') }}">
                         </div>
                     </div>
 
@@ -29,60 +29,8 @@
         <div class="message"></div>
     </fieldset>
     <br /><br /><br /><br />
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-        <legend>分析数据</legend>
-    </fieldset>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">累计充值总金额:</label>
-            <div class="layui-input-inline">
-                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num1}}</div>
-            </div>
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">充值总人数:</label>
-            <div class="layui-input-inline">
-                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num1}}</div>
-            </div>
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">二次充值人数:</label>
-            <div class="layui-input-inline">
-                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num2}}</div>
-            </div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-inline">
-            <label class="layui-form-label">一次性充值最高金额:</label>
-            <div class="layui-input-inline">
-                <span id="num4"></span>
-            </div>
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">充值最高金额日期:</label>
-            <div class="layui-input-inline">
-                <span id="num5"></span>
-            </div>
-        </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">使用最多的充值渠道:</label>
-            <div class="layui-input-inline">
-                <span id="num6"></span>
-            </div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label" style="">注册人均充值:</label>
-        <div class="layui-input-inline">
-            <span id="num7"></span>
-        </div>
-    </div>
-    <style>
-        .layui-form-label {
-            width: 161px;
-        }
-    </style>
+
+
 
     <script src="{{ asset("js/jquery-2.1.0.js") }}"></script>
     <script src="{{ asset("highcharts/highcharts.js") }}"></script>
@@ -99,7 +47,7 @@
         function fun() {
             time = $("#time").val();
             console.log(time);
-            $.getJSON('{{url("admin/api/amount")}}',{'time':time}, function (data) {
+            $.getJSON('{{url("admin/cztj")}}',{'time':time}, function (data) {
                 // console.log(data.date);
                 var date = data.date, value = data.value;
                 // console.log(total);
@@ -112,24 +60,24 @@
             })
         }
 
-        var chart;
-        $.getJSON('{{url("admin/api/amount")}}',{'time':time}, function (data) {
+        var chart, total = {{$num}};
+        $.getJSON('{{url("admin/cztj")}}',{'time':time}, function (data) {
             // console.log(data);
             var date = data.date, value = data.value;
-            // console.log(value);
+            console.log(value);
             chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'container',
                     type: 'spline',
                 },
                 title: {
-                   text: "充值金额(元)",
+                    text: "注册日统计图",
                     left: -10
                 },
-                // subtitle: {
-                //     align: "left",
-                //     text: '总充值金额:' + total
-                // },
+                subtitle: {
+                    align: "top",
+                    text: '注册总人数:' + total + "人"
+                },
                 xAxis: {
                     /*title: {
                         text: AxisNames[0]
@@ -138,12 +86,12 @@
                 },
                 yAxis: {
                     title: {
-                        text: '充值金额'
+                        text: '每日注册人数'
                     }
                 },
                 tooltip: {
                     animation: true,
-                    valueSuffix: '元'
+                    valueSuffix: '人'
                 },
                 legend: {
                     align: 'center',
@@ -168,7 +116,7 @@
                     }
                 },
                 series: [{
-                    name: '充值金额',
+                    name: '注册人数',
                     data: value
                 }],
                 responsive: {

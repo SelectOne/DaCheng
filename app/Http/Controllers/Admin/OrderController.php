@@ -103,41 +103,17 @@ class OrderController extends BaseController
 
     public function getAmount()
     {
-//        $time = $request->time();
-
-        return view("admin.data.amount");
+        $num1 = $this->repository->rechargeNum();
+        $num2 = $this->repository->rechargeNum(1);
+//        $num3 = $this->repository->rechargeTop();
+        return view("admin.data.amount",compact("num1", "num2"));
     }
 
+    // 充值金额折线图数据
     public function orderAmount(OrderRequest $request)
     {
         $time = $request->time();
-//        dd($time);
-        if ($time['not']){
-            $range = \Carbon\Carbon::now()->subDays(7);
-            $data = Order::where('created_at', '>=', $range)
-                ->groupBy('date')
-                ->get([
-                    DB::raw('Date(created_at) as date'),
-                    DB::raw('sum(amount) as value')
-                ])->toArray();
-        } else {
-            $data = Order::whereBetween('created_at', $time['tt'], 'and', $time['not'])
-                ->groupBy('date')
-                ->get([
-                    DB::raw('Date(created_at) as date'),
-                    DB::raw('sum(amount) as value')
-                ])->toArray();
-        }
-
-        $arr = [];
-        foreach ($data as $k=>$v)
-        {
-            $arr['date'][] = $v['date'];
-            $arr['value'][] = (float)$v['value'];
-            $arr['total'] = array_sum($arr['value']);
-        }
-        $data = json_encode($arr);
-//        dd($data);
+        $data = $this->repository->amount($time);
         return $data;
     }
 }

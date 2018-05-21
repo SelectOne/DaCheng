@@ -88,6 +88,9 @@
                     <a class="" href="javascript:;">数据分析</a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="9" date-url="{{ url("admin/order/amount") }}">充值统计</a></dd>
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="10" date-url="{{ url("admin/member/statistics") }}">注册统计</a></dd>
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="11" date-url="{{ url("admin/member/inRoom") }}">在房间玩家</a></dd>
+
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="">发布商品</a></li>

@@ -34,6 +34,7 @@ class CardRequest extends FormRequest
         switch ($Method) {
             case 'store':
                 $data = $this->only(['type_id', 'card_price', 'card_num', 'given', 'expire_time', 'max_use', 'card_first', 'card_length']);
+                $data['max_use'] = ! is_null($data['max_use']) ? $data['max_use'] : 0;
                 $data['info'] = [
                     'admin_id'     => session("admin_id"),
                     'card_num'     => $data['card_num'],

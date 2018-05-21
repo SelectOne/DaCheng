@@ -8,7 +8,9 @@
 
 namespace App\Repositories;
 
+use App\Models\Order;
 use App\Repositories\Eloquent\Repository;
+use DB;
 
 class OrderRepository extends Repository
 {
@@ -22,7 +24,7 @@ class OrderRepository extends Repository
     {
 //        dd($arr);
         extract($arr);
-        $data = $this->model->whereBetween('created_time', $tt,'and',$not);
+        $data = $this->model->whereBetween('created_at', $tt,'and',$not);
         if ( isset($mid) ) {
             $data = $data->where('mid', $mid);
         }
@@ -49,19 +51,50 @@ class OrderRepository extends Repository
 
     public function amount($time)
     {
-//        $time = $this->has("time")?$this->get("time"):"";
-//        list($start, $end) = explode("--", $time);
-//        $end = ltrim($end, " ");
-
-        $rs = $this->model->where("status", 1)->whereMonth ('created_time', 5)->get();
-        dd($rs);
-        dd($rs->whereDay ('created_time',today())->first());
-        for ($i=$time[0]; $i<$time[1]; $i+=$i*1024*60) {
-            $data[] = $rs->whereBetween('created_time', [$time[0],$time[0]+$i])->sum("amount");
+        if ($time['not']){
+            $range = \Carbon\Carbon::now()->subDays(7);
+            $data = Order::where('created_at', '>=', $range);
+        } else {
+            $data = Order::whereBetween('created_at', $time['tt'], 'and', $time['not']);
         }
-        dd($data);
-        $data = json_encode($data, JSON_UNESCAPED_UNICODE);
-        return $data;
+        $data = $data->where('status', 1)
+                     ->groupBy('date')
+                     ->get([
+                         DB::raw('Date(created_at) as date'),
+                         DB::raw('sum(amount) as value')
+                     ])->toArray();
+        $arr = [];
+        foreach ($data as $k=>$v)
+        {
+            $arr['date'][] = $v['date'];
+            $arr['value'][] = (float)$v['value'];
+//            $arr['total'] = array_sum($arr['value']);
+        }
+        return json_encode($arr);
+
     }
 
+    // 统计充值人数
+    public function rechargeNum($type = null)
+    {
+        $num = $this->model->where('status', 1);
+        if (is_null($type)) {
+            $num = $num->count();
+        } else {
+            $num = $num->groupBy('mid')->count();
+        }
+        return $num;
+    }
+
+    public function rechargeTop()
+    {
+//        $num = $this->model->where('status', 1)->select(DB::raw('max(amount) as top'),'created_at')->groupBy('order_id')->first();
+
+
+    }
+
+    public function type()
+    {
+//        $num = $this->model->where('status', 1);
+    }
 }

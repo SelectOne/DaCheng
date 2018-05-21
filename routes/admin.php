@@ -43,6 +43,10 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('member/checkStatus', 'MemberController@checkStatus');                                    // 冻结/解冻
     Route::get('member/recharge', 'MemberController@recharge');                                          // 冻结/解冻
     Route::get('member/limit', 'MemberController@limit');                                                // 限制列表
+    Route::get('member/statistics', 'MemberController@statistics');
+    Route::get('cztj', 'MemberController@cztj');
+    Route::get('member/inRoom', 'MemberController@inRoom');
+    Route::get('mInRoom', 'MemberController@mInRoom');
 
     // RestrictController
     Route::get('restrict/index', 'RestrictController@index');

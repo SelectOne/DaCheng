@@ -149,7 +149,7 @@
                 , page: true //开启分页
                 , cols: [[ //表头
                     {type: 'checkbox', fixed: 'left'}
-                    , {field: 'created_time', title: '订单日期', width:200, unresize: true, sort: true}
+                    , {field: 'created_at', title: '订单日期', width:200, unresize: true, sort: true}
                     , {field: 'sn', title: '订单号码', unresize: true, sort: true}
                     , {field: 'type', title: '充值类型', unresize: true, sort: true, templet: '#tpl3'}
                     , {field: 'mid', title: '用户账号', templet: '#tpl1'}
