@@ -43,10 +43,6 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('member/checkStatus', 'MemberController@checkStatus');                                    // 冻结/解冻
     Route::get('member/recharge', 'MemberController@recharge');                                          // 冻结/解冻
     Route::get('member/limit', 'MemberController@limit');                                                // 限制列表
-    Route::get('member/statistics', 'MemberController@statistics');
-    Route::get('cztj', 'MemberController@cztj');
-    Route::get('member/inRoom', 'MemberController@inRoom');
-    Route::get('mInRoom', 'MemberController@mInRoom');
 
     // RestrictController
     Route::get('restrict/index', 'RestrictController@index');
@@ -78,4 +74,18 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
 
     Route::resource('log','LogController');
     Route::get('getLog', 'LogController@getData')->name("log.getData");
+
+    // 数据分析
+    Route::get('member/statistics', 'MemberController@statistics');
+    Route::get('cztj', 'MemberController@cztj');
+    Route::get('member/inRoom', 'MemberController@inRoom');
+    Route::get('mInRoom', 'MemberController@mInRoom');
+    Route::get('member/active', 'MemberController@activePlayer');
+    Route::get('lively1', 'MemberController@lively1');
+    Route::get('lively2', 'MemberController@lively2');
+
+    // 报表
+    Route::get('collect', 'IndexController@collect');
+    Route::get('coinChange', 'IndexController@coinChange');
+    Route::get('coin', 'IndexController@coin');
 });

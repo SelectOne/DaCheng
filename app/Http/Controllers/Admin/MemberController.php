@@ -131,13 +131,10 @@ class MemberController extends BaseController
     public function recharge(MemberRequest $request)
     {
         $data = $request->all();
-        $rs = $this->MRepository->recharge($data['id'],$data['num']);
-        if ($rs) {
-            Helper::plog("后台充值,用户ID:".$data['id'], 2);
-            return redirect("admin/member/index")->with(["success"=>1, "msg"=>"充值成功!"]);
-        } else {
-            return redirect("admin/member/index")->withErrors("充值失败!");
-        }
+        $this->MRepository->recharge($data['id'],$data['num']);
+
+//        Helper::plog("后台充值,用户ID:".$data['id'], 2);
+        return redirect("admin/member/index")->with(["success"=>1, "msg"=>"充值成功!"]);
     }
 
     /**
@@ -173,6 +170,11 @@ class MemberController extends BaseController
         return view("admin.data.inRoom", compact("rooms"));
     }
 
+    /**
+     * 在房间玩家数据
+     * @param Request $request
+     * @return array
+     */
     public function mInRoom(Request $request)
     {
         $arr = $request->all();
@@ -180,5 +182,42 @@ class MemberController extends BaseController
         $count = $data['count'];
         unset($data['count']);
         return ['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data];
+    }
+
+    /**
+     * 活跃玩家展示
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function activePlayer()
+    {
+        $data = $this->lively2();
+        return view("admin.data.active", compact('data'));
+    }
+
+    /**
+     * 每天活跃时长大于1小时玩家数
+     * @param MemberRequest $request
+     * @return string
+     */
+    public function lively1(MemberRequest $request)
+    {
+        $time = $request->time();
+        $data = $this->MRepository->lively1($time);
+//        var_dump($data);exit;
+        return $data;
+    }
+
+    /**
+     * 每月活跃时长玩家数
+     * @return array|mixed
+     */
+    public function lively2()
+    {
+        $data = $this->MRepository->lively2();
+        $total = $this->MRepository->total(0);
+        $data = array_map(function ($v) use($total){
+            return round($v/$total, 2, PHP_ROUND_HALF_EVEN);
+        }, $data);
+        return $data;
     }
 }

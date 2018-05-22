@@ -8,5 +8,5 @@ class Room extends Model
 {
     protected $table = "room";
     public $timestamps = false;
-    protected $fillable = ['id', 'name'];
+    protected $fillable = ['id', 'name', 'num'];
 }

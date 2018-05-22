@@ -90,7 +90,14 @@
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="9" date-url="{{ url("admin/order/amount") }}">充值统计</a></dd>
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="10" date-url="{{ url("admin/member/statistics") }}">注册统计</a></dd>
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="11" date-url="{{ url("admin/member/inRoom") }}">在房间玩家</a></dd>
-
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="12" date-url="{{ url("admin/member/active") }}">活跃玩家统计</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a class="" href="javascript:;">财务报表</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="14" date-url="{{  url("admin/collect") }}">汇总报表</a></dd>
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="15" date-url="{{ url("admin/coinChange") }}">玩家账变记录</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="">发布商品</a></li>

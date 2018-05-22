@@ -18,4 +18,16 @@ class RoomRepository extends Repository
     {
         return "App\Models\Room";
     }
+
+    public function sum()
+    {
+        $sum = $this->model->sum("num");
+        return $sum;
+    }
+
+    public function getAll()
+    {
+        $rows = $this->model->get();
+        return $rows;
+    }
 }

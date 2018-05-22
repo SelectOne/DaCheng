@@ -8,6 +8,8 @@
 
 namespace App\Repositories;
 
+use App\Models\CoinChange;
+use App\Models\Given;
 use App\Models\Member;
 use App\Repositories\Contracts\RepositoryInterface;
 use App\Repositories\Eloquent\Repository;
@@ -51,7 +53,6 @@ class MemberRepository extends Repository
             $field = 'id';
             $type  = 'desc';
         }
-//        dd($field, $type);
         $data = $this->model->where('nickname', 'like', "$nickname%")
                         ->whereBetween('login_time', $tt,'and',$not);
         if (!empty($id)) {
@@ -67,12 +68,7 @@ class MemberRepository extends Repository
             $data = $data->where('machine_ip', $machine_ip);
         }
         $count = $data->count();
-//        dd($field, $type);
         $data = $data->offset($offset)->limit($arr['limit'])->orderBy($field, $type)->get();
-        foreach ($data as $v) {
-            $v['login_time'] = date("Y-m-d H:i:s", $v['login_time']);
-
-        }
         $data['count'] = $count;
         return $data;
     }
@@ -80,8 +76,23 @@ class MemberRepository extends Repository
     // 充值
     public function recharge($id, $num)
     {
-        $rs = $this->model()::where("id", $id)->increment('num', $num);
-        return $rs;
+        DB::transaction(function () use($id, $num){
+            $row = Member::find($id);
+//            dd($row->num);
+            $rs3 = CoinChange::create([
+                "mid"         => $id,
+                "start_coin"  => $row->num,
+                "change_coin" => $num,
+                "end_coin"    => $row->num + $num,
+                "type"        => 5,
+            ]);
+            $rs1 = $this->model->where("id", $id)->increment('num', $num);
+            $rs2 = Given::create([
+                "mid"  => $id,
+                "num"  => $num,
+                "type" => 2,
+            ]);
+        });
     }
 
     public function register($time)
@@ -102,15 +113,19 @@ class MemberRepository extends Repository
         {
             $arr['date'][] = $v['date'];
             $arr['value'][] = $v['value'];
-//            $arr['total'] = array_sum($arr['value']);
         }
-//        dd($arr);
+
         return json_encode($arr);
     }
 
-    public function total()
+    public function total($status = null)
     {
-        $num = $this->model->count();
+        if (is_null($status)) {
+            $num = $this->model->count();
+        } else {
+            $num = $this->model->where('status', 0)->count();
+        }
+
         return $num;
     }
 
@@ -132,4 +147,74 @@ class MemberRepository extends Repository
         $data['count'] = $count;
         return $data;
     }
+
+    // 每天活跃时长大于1小时玩家数
+    public function lively1($time)
+    {
+        if ($time['not']) {
+            $range = \Carbon\Carbon::now()->subDays(30);
+            $data = Member::where('login_time', '>=', $range);
+        } else {
+            $data = Member::whereBetween('login_time', $time['tt'], 'and', $time['not']);
+        }
+        $data = $data->where([
+                                ['status', '=', 0],
+                                ["duration", '>=', 1]
+                            ])
+                            ->groupBy('date')
+                            ->get([
+                                DB::raw('Date(login_time) as date'),
+                                DB::raw('count(id) as value')
+                            ])
+                            ->toArray();
+        $arr = [];
+        foreach ($data as $k=>$v)
+        {
+            $arr['date'][] = $v['date'];
+            $arr['value'][] = $v['value'];
+        }
+        return json_encode($arr);
+    }
+
+    // 每月活跃时长玩家数
+    public function lively2()
+    {
+        $range = \Carbon\Carbon::now()->subDays(30);
+        $num0 = Member::where('login_time', '>=', $range)
+            ->where('status', 0)
+            ->where([
+                ["duration", '<', 1]
+            ])
+            ->get([
+                DB::raw('count(id) as value')
+            ])
+            ->toArray();
+        $arr[0] = $num0[0]['value'];
+
+        $num1 = Member::where('login_time', '>=', $range)
+                        ->where('status', 0)
+                        ->where([
+                            ["duration", '>=', 1],
+                            ["duration", '<', 40]
+                        ])
+                        ->get([
+                            DB::raw('count(id) as value')
+                        ])
+                        ->toArray();
+        $arr[1] = $num1[0]['value'];
+
+        $num2 = Member::where('login_time', '>=', $range)
+                        ->where('status', 0)
+                        ->where([
+                            ["duration", '>=', 40]
+                        ])
+                        ->get([
+                            DB::raw('count(id) as value')
+                        ])
+                        ->toArray();
+        $arr[2] = $num2[0]['value'];
+        return $arr;
+    }
+
+
 }

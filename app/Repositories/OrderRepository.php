@@ -49,6 +49,7 @@ class OrderRepository extends Repository
         return $data;
     }
 
+    // 时间段充值数据
     public function amount($time)
     {
         if ($time['not']){
@@ -96,5 +97,12 @@ class OrderRepository extends Repository
     public function type()
     {
 //        $num = $this->model->where('status', 1);
+    }
+
+    // 充值总金额
+    public function total()
+    {
+        $total = $this->model->where("status", 1)->sum("paid");
+        return $total;
     }
 }

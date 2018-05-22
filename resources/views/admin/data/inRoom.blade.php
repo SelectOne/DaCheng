@@ -28,11 +28,15 @@
             <table id="demo" lay-filter="test"></table>
         </div>
     </fieldset>
+
+    <script type="text/html" id="tpl1">
+        <a href="{{url("admin/member/index?id=")}}@{{d.id}}" class="layui-table-link">@{{ d.id }}</a>
+        {{--@{{d.id}}--}}
+    </script>
+
     <script>
-        layui.use(['table', 'form', 'laydate'], function() {
-            var table = layui.table,
-                form = layui.form,
-                laydate = layui.laydate;
+        layui.use('table', function() {
+            var table = layui.table;
 
             table.render({
                 elem: '#demo'
@@ -42,9 +46,9 @@
                 , page: true //开启分页
                 , cols: [[ //表头
                     {type: 'checkbox', fixed: 'left'}
-                    , {field: 'id', title: '用户ID'}
+                    , {field: 'id', title: '用户ID', templet: "#tpl1"}
                     , {field: 'realname', title: '用户名'}
-                    , {field: 'nickname', title: '限制登录'}
+                    , {field: 'nickname', title: '昵称'}
                     , {field: 'game_id', title: '游戏ID'}
                     , {field: 'room_name', title: '所在房间'}
                     , {field: 'ip', title: '进入IP'}
@@ -76,8 +80,7 @@
                     table.reload('demo', {
                         // 点击查询和刷新数据表会把以下参数传到后端进行查找和分页显示
                         where: {
-                            limit_ip: $("input[name='limit_ip']").val()
-                            ,type: type
+                            room_id: $("select[name='room_id']").val()
                         }
                     });
                 }

@@ -12,7 +12,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">IP/机器码</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="limit_ip" id="limit_ip"  class="layui-input" value="{{ old("limit_ip") }}" placeholder="ID">
+                            <input type="text" name="limit_ip" id="limit_ip"  class="layui-input" value="{{ old("limit_ip") }}" placeholder="IP/机器码">
                         </div>
                     </div>
                     <div class="layui-inline">

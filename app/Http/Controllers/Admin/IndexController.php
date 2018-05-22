@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\CoinChangeRequest;
+use App\Repositories\CoinChangeRepository;
+use App\Repositories\GivenRepository;
+use App\Repositories\OrderRepository;
+use App\Repositories\RoomRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -85,5 +90,28 @@ class IndexController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function collect(GivenRepository $givenRepository, OrderRepository $orderRepository, RoomRepository $roomRepository)
+    {
+        $recharge = $orderRepository->total();
+        $data = $givenRepository->getAll();
+        $sum = $roomRepository->sum();
+        $rows = $roomRepository->getAll();
+        return view("admin.data.list", compact("data", "recharge", "sum", "rows"));
+    }
+
+    public function coinChange()
+    {
+        return view('admin.data.coinChange');
+    }
+
+    public function coin(CoinChangeRequest $request, CoinChangeRepository $coinChangeRepository)
+    {
+        $arr = $request->filter();
+        $data = $coinChangeRepository->limit($arr);
+        $count = $data['count'];
+        unset($data['count']);
+        return ['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data];
     }
 }
