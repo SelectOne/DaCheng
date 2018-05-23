@@ -22,29 +22,25 @@ class CardRepository extends Repository
     // 分页
     public function limit($arr)
     {
-        $data = $this->model->with([
-            'info' => function ($query) use($arr){
-                $query->whereBetween('created_time', $arr['tt'],'and',$arr['not']);
-            },
-        ]);
+//        $data = $this->model->with([
+//            'info' => function ($query) use($arr){
+//                $query->whereBetween('created_time', $arr['tt'],'and',$arr['not']);
+//            },
+//        ]);
+        $data = DB::table("card")
+                    ->leftJoin("card_info as info", "info.id", "=" ,"card.card_info_id")
+                    ->leftJoin("type", "type.id", "=" ,"card.type_id")
+                    ->leftJoin("admin", "admin.admin_id", "=" ,"info.admin_id")
+                    ->select("card.*","info.created_time","info.card_num","info.total_price","type.name","type.given","type.card_price","admin.admin_name","admin.ip")
+                    ->whereBetween('info.created_time', $arr['tt'],'and',$arr['not']);
 
-        if ( ! empty($card_id) ) {
-            $data = $data->where('card.card_id', $card_id);
+        if ( $arr['card_id'] ) {
+            $data = $data ->where('card.card_id', $arr['card_id']);
         }
         $count = $data->count();
-        $data = $data->offset($arr['offset'])->limit($arr['limit'])->orderBy($arr['field'], $arr['order'])->get();
-//        dd($data);
-        foreach ($data as &$v) {
-            if ( ! is_null($v->info) ){
-                $v['admin_name'] = $v->info->admin->admin_name;
-                $v['ip'] = $v->info->admin->ip;
-                $v['created_time'] = date("Y-m-d H:i:s" ,$v->info->created_time);
-                $v['card_num'] = $v->info->card_num;
-                $v['total_price'] = $v->info->total_price;
-            }
-            $v['card_name'] = $v->type->name;
-            $v['card_price'] = $v->type->card_price;
-            $v['given'] = $v->type->given;
+        $data = $data->offset($arr['offset'])->limit($arr['limit'])->orderBy($arr['field'], $arr['order'])->get()->toArray();
+        foreach ($data as $v) {
+            $v->created_time = date("Y-m-d H:i:s" ,$v->created_time);
         }
         $data['count'] = $count;
         return $data;

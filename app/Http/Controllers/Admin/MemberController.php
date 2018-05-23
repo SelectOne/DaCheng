@@ -132,18 +132,18 @@ class MemberController extends BaseController
     {
         $data = $request->all();
         $this->MRepository->recharge($data['id'],$data['num']);
-
-//        Helper::plog("后台充值,用户ID:".$data['id'], 2);
+        Helper::plog("后台充值,用户ID:".$data['id']."金额:".$data['num'], 2);
         return redirect("admin/member/index")->with(["success"=>1, "msg"=>"充值成功!"]);
     }
 
     /**
-     * 每日在线玩家统计图
+     * 注册统计
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function statistics()
     {
         $num = $this->MRepository->total();
+        Helper::plog("查看注册统计", 1);
         return view("admin.data.register", compact("num"));
     }
 
@@ -167,6 +167,7 @@ class MemberController extends BaseController
     public function inRoom(RoomRepository $roomRepository)
     {
         $rooms = $roomRepository->all();
+        Helper::plog("查看在房间玩家", 1);
         return view("admin.data.inRoom", compact("rooms"));
     }
 
@@ -191,6 +192,7 @@ class MemberController extends BaseController
     public function activePlayer()
     {
         $data = $this->lively2();
+        Helper::plog("查看活跃玩家", 1);
         return view("admin.data.active", compact('data'));
     }
 

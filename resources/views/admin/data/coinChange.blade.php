@@ -14,7 +14,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">玩家ID</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="id" id="id"  class="layui-input" value="{{ old("id") }}" placeholder="ID">
+                        <input type="text" name="id" id="id"  class="layui-input" value="{{ $id?:"" }}" placeholder="ID">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -50,9 +50,9 @@
     <script type="text/html" id="tpl1">
         @verbatim
             {{#  if(d.end_coin > d.start_coin){ }}
-            <span style="color: green">+</span>{{ d.change_coin }}
+            <span style="color: darkgreen">+{{ d.change_coin }}</span>
             {{#  } else { }}
-            <span style="color: red">-</span>{{d.change_coin }}
+            <span style="color: red">-{{d.change_coin }}</span>
             {{#  } }}
         @endverbatim
     </script>
@@ -73,6 +73,9 @@
             table.render({
                 elem: '#demo'
                 , url: '{{ url("admin/coin") }}' //数据接口
+                , where: {
+                    id: $('#id').val()
+                }
                 , width: 1640
                 , height: 500
                 , page: true //开启分页

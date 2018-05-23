@@ -19,14 +19,27 @@ class Helper
      */
     public static function getIP()
     {
-        $ip = '';
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            return self::is_ip($_SERVER['HTTP_CLIENT_IP']) ? $_SERVER['HTTP_CLIENT_IP'] : $ip;
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            return self::is_ip($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $ip;
-        } else {
-            return self::is_ip($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : $ip;
+        if(!empty($_SERVER["HTTP_CLIENT_IP"]))
+        {
+            $cip = $_SERVER["HTTP_CLIENT_IP"];
         }
+        else if(!empty($_SERVER["HTTP_X_FORWARDED_FOR"]))
+        {
+            $cip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        }
+        else if(!empty($_SERVER["REMOTE_ADDR"]))
+        {
+            $cip = $_SERVER["REMOTE_ADDR"];
+        }
+        else
+        {
+            $cip = '';
+        }
+        preg_match("/[\d\.]{7,15}/", $cip, $cips);
+        $cip = isset($cips[0]) ? $cips[0] : 'unknown';
+        unset($cips);
+
+        return $cip;
     }
 
     /**
@@ -116,6 +129,11 @@ class Helper
         }
     }
 
+    /**
+     * 记录日志
+     * @param $title  内容
+     * @param $type  1:安全日志  2:操作日志  3:登录日志
+     */
     public static function plog($title, $type)
     {
         $admin_id = session('admin_id');
@@ -125,5 +143,22 @@ class Helper
             'type'         => $type,
             'created_time' => time(),
         ]);
+    }
+
+    public static function getType($type)
+    {
+        switch ($type)
+        {
+            case 0:
+                return "实卡充值";
+            case 1:
+                return "支付宝";
+            case 1:
+                return "微信";
+            case 1:
+                return "银行卡";
+            case 1:
+                return "其它";
+        }
     }
 }

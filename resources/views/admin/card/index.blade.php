@@ -276,7 +276,7 @@
                     , {field: 'card_id', title: '卡号'}
                     , {field: 'created_time', title: '生成日期', width:200}
                     , {field: 'admin_name', title: '管理员'}
-                    , {field: 'card_name', title: '实卡名称'}
+                    , {field: 'name', title: '实卡名称'}
                     , {field: 'card_num', title: '实卡数量', sort: true}
                     , {field: 'card_price', title: '实卡价格', sort: true}
                     , {field: 'given', title: '赠送金币', sort: true}

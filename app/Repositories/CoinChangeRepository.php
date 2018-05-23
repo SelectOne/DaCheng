@@ -32,7 +32,7 @@ class CoinChangeRepository extends Repository
         }
         $count = $data->count();
 
-        $data = $data->offset($arr['offset'])->limit($arr['limit'])->get();
+        $data = $data->offset($arr['offset'])->limit($arr['limit'])->orderBy('id', 'desc')->get();
         foreach ($data as $v)
         {
             switch ($v['type'])

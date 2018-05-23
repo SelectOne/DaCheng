@@ -10,6 +10,7 @@ namespace App\Repositories;
 
 use App\Models\Order;
 use App\Repositories\Eloquent\Repository;
+use App\Services\Helper;
 use DB;
 
 class OrderRepository extends Repository
@@ -87,16 +88,26 @@ class OrderRepository extends Repository
         return $num;
     }
 
+    // 一次性充值最高金额
     public function rechargeTop()
     {
-//        $num = $this->model->where('status', 1)->select(DB::raw('max(amount) as top'),'created_at')->groupBy('order_id')->first();
-
-
+        $top = DB::table('order')->select('amount','created_at')->where('status', 1)->orderBy('amount','desc')->first();
+        return $top;
     }
 
+    // 使用最多的充值方式
     public function type()
     {
-//        $num = $this->model->where('status', 1);
+        $type = DB::table('order')
+                ->where('status', 1)
+                ->select("type")
+                ->groupBy("type")
+                ->get([
+                    DB::raw('count(type) as top')
+                ])
+                ->toArray();
+        $type = Helper::getType($type[0]->type);
+        return $type;
     }
 
     // 充值总金额

@@ -31,7 +31,7 @@ class LogRepository extends Repository
             $data = $data->where('type', $arr['type']);
         }
         $count = $data->count();
-        $data = $data->offset($arr['offset'])->limit($arr['limit'])->get();
+        $data = $data->offset($arr['offset'])->limit($arr['limit'])->orderBy('id', 'desc')->get();
         foreach ( $data as $v)
         {
             $v['admin_name'] = $v->admin->admin_name;

@@ -73,21 +73,30 @@ class MemberRepository extends Repository
         return $data;
     }
 
-    // 充值
+    /**
+     * 后台充值
+     * @param $id  玩家ID
+     * @param $num  充值金额
+     */
     public function recharge($id, $num)
     {
-        DB::transaction(function () use($id, $num){
+        DB::transaction( function () use( $id, $num )
+        {
+            // 当前充值玩家
             $row = Member::find($id);
-//            dd($row->num);
-            $rs3 = CoinChange::create([
+            // 插入玩家金币变化表
+            CoinChange::create([
                 "mid"         => $id,
                 "start_coin"  => $row->num,
                 "change_coin" => $num,
                 "end_coin"    => $row->num + $num,
                 "type"        => 5,
             ]);
-            $rs1 = $this->model->where("id", $id)->increment('num', $num);
-            $rs2 = Given::create([
+            // 玩家表金币增长
+            $row->num = $row->num + $num;
+            $row->save();
+            // 插入赠送金币表
+            Given::create([
                 "mid"  => $id,
                 "num"  => $num,
                 "type" => 2,

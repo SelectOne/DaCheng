@@ -28,7 +28,7 @@
         <div id="container" style="min-width:400px;height:400px"></div>
         <div class="message"></div>
     </fieldset>
-    <br /><br /><br /><br />
+    <br /><br /><br /><br /><br />
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
         <legend>分析数据</legend>
     </fieldset>
@@ -36,19 +36,19 @@
         <div class="layui-inline">
             <label class="layui-form-label">累计充值总金额:</label>
             <div class="layui-input-inline">
-                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num1}}</div>
+                <div class="layui-form-mid "><span style="font-weight: bold;color: black;">{{$num1}}</span>元</div>
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">充值总人数:</label>
             <div class="layui-input-inline">
-                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num1}}</div>
+                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num2}}</div>
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">二次充值人数:</label>
             <div class="layui-input-inline">
-                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num2}}</div>
+                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num3}}</div>
             </div>
         </div>
     </div>
@@ -56,26 +56,26 @@
         <div class="layui-inline">
             <label class="layui-form-label">一次性充值最高金额:</label>
             <div class="layui-input-inline">
-                <span id="num4"></span>
+                <div class="layui-form-mid " ><span style="font-weight: bold;color: black;">{{$num4->amount}}</span>元</div>
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">充值最高金额日期:</label>
             <div class="layui-input-inline">
-                <span id="num5"></span>
+                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num4->created_at}}</div>
             </div>
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">使用最多的充值渠道:</label>
             <div class="layui-input-inline">
-                <span id="num6"></span>
+                <div class="layui-form-mid " style="font-weight: bold;color: black;">{{$num5}}</div>
             </div>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label" style="">注册人均充值:</label>
         <div class="layui-input-inline">
-            <span id="num7"></span>
+            <div class="layui-form-mid "><span style="font-weight: bold;color: black;">{{$num6}}</span>元</div>
         </div>
     </div>
     <style>

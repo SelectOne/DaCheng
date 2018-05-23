@@ -15,6 +15,7 @@ class AdminRepository extends Repository{
     public function checkLogin($name, $password)
     {
         $admin = $this->model->where('admin_name', $name)->first();
+//        dd($admin['salt']);
         $password = md5($password . $admin['salt']);
         if ($password == $admin['password']) {
             return $admin;

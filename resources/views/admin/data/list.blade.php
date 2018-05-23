@@ -26,7 +26,11 @@
                 <td>{{$data[1]}}</td>
                 <td>{{$data[2]}}</td>
                 <td>{{$data[3]}}</td>
-                <td>{{$sum>0?"+".$sum:"-".$sum}}</td>
+                @if ( $sum > 0 )
+                    <td><span style="color: darkgreen">+{{$sum}}</span></td>
+                @else
+                    <td><span style="color: red">-{{$sum}}</span></td>
+                @endif
             </tr>
         </tbody>
     </table>
@@ -46,7 +50,11 @@
             <tr>
                 <td>{{$row->id}}</td>
                 <td>{{$row->name}}</td>
-                <td>{{$sum>0?"+".$sum:"-".$sum}}</td>
+                @if ( $row->num > 0 )
+                    <td><span style="color: darkgreen">+{{$row->num}}</span></td>
+                @else
+                    <td><span style="color: red">-{{$row->num}}</span></td>
+                @endif
             </tr>
         @endforeach
         </tbody>

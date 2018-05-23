@@ -27,8 +27,9 @@ class LoginController extends BaseController
         if($admin = $this->AdminRepository->checkLogin($request->input('name'),$request->input('password'))){
             Session::put('admin_id',$admin['admin_id']);
             Session::put('name',$admin['admin_name']);
-            $ip = $_SERVER["REMOTE_ADDR"];
-            Helper::plog($admin['name'].'登入成功 登入IP:'.$ip, 3);
+            $ip = Helper::getIP();
+//            dd($ip);
+            Helper::plog($admin['name']."登入后台 登入IP:".$ip, 3);
             return redirect("admin");
         }else{
             return back()->withErrors('用户名或密码不正确!');
@@ -38,8 +39,8 @@ class LoginController extends BaseController
     public function outLogin(Request $request){
 //        plog($request->session()->get('name').'退出登入');
 //        Admin::outLogin($request->session()->get('admin_id'));
-        $request->session()->flush();
         Helper::plog(session('name').' 退出登录', 1);
+        $request->session()->flush();
         return redirect('admin/login');
     }
 }

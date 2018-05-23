@@ -58,7 +58,7 @@ class CardRequest extends FormRequest
         $time = $this->has("created_time")?$this->get("created_time"):"";
         if ( ! array_key_exists('field', $arr) && ! array_key_exists('order', $arr) )
         {
-            $arr['field'] = "id";
+            $arr['field'] = "card.id";
             $arr['order'] = "desc";
         }
         $arr['not'] = true;

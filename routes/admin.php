@@ -24,12 +24,8 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::delete('node/{id}', 'NodeController@destroy')->name('node.destroy');
 
     Route::resource('role','RoleController');
-//    Route::get('role/index','RoleController@index');
     Route::get('api/getData','RoleController@getData')->name("role.getData");
-    /*Route::post('role/store', 'RoleController@store');
-    Route::post('role/update', 'RoleController@update');
-    Route::get('role/destroy', 'RoleController@destroy');
-    Route::get('role/create', 'RoleController@create');*/
+
 // PermissionController
     Route::get('permission/index', 'PermissionController@index');
     Route::get('permission/getData', 'PermissionController@getData');
@@ -54,8 +50,6 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     // OrderController
     Route::get('order/index', 'OrderController@index');
     Route::get('order/getData', 'OrderController@getData');
-    Route::get('order/amount', 'OrderController@getAmount');
-    Route::get('api/amount', 'OrderController@orderAmount');
 
     // CardController
     Route::resource('card','CardController');
@@ -65,8 +59,8 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('getPrice/{id}', function ($id, \App\Models\Type $type){
         return $type->where('id', $id)->value("card_price");
     })->name("type.getPrice");
-//    Route::put('type/{$id}', 'CardController@getData')->name("type.update");
-//    Route::post('type', 'CardController@typeStore')->name("type.store");
+
+
     // TypeController
     Route::resource('type','TypeController');
 //    Route::resource('cardinfo','CardinfoController');
@@ -76,6 +70,8 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('getLog', 'LogController@getData')->name("log.getData");
 
     // 数据分析
+    Route::get('order/amount', 'OrderController@getAmount');
+    Route::get('api/amount', 'OrderController@orderAmount');
     Route::get('member/statistics', 'MemberController@statistics');
     Route::get('cztj', 'MemberController@cztj');
     Route::get('member/inRoom', 'MemberController@inRoom');
