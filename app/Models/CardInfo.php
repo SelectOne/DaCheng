@@ -9,7 +9,7 @@ class CardInfo extends Model
     protected $table = "card_info";
     public $primaryKey = "id";
     public $timestamps = "false";
-    protected $fillable = [ "admin_id", "card_num", "total_price", "given", "max_use", "created_time", "expire_time"];
+    protected $fillable = [ "admin_id", "card_num", "total_price", "given", "max_use", "created_time", "expire_time", "type_id"];
 
     public function admin()
     {
@@ -19,6 +19,11 @@ class CardInfo extends Model
     public function card()
     {
         return $this->hasMany("App\Models\Card", "card_info_id", "id");
+    }
+
+    public function type()
+    {
+        return $this->belongsTo("App\Models\Type", "type_id", "id");
     }
 
 }

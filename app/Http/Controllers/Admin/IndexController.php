@@ -98,13 +98,14 @@ class IndexController extends Controller
      * @param GivenRepository $givenRepository
      * @param OrderRepository $orderRepository
      * @param RoomRepository $roomRepository
+     * @param CoinChangeRepository $coinChangeRepository
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function collect(GivenRepository $givenRepository, OrderRepository $orderRepository, RoomRepository $roomRepository)
+    public function collect(GivenRepository $givenRepository, OrderRepository $orderRepository, RoomRepository $roomRepository, CoinChangeRepository $coinChangeRepository)
     {
         $recharge = $orderRepository->total();
         $data = $givenRepository->getAll();
-        $sum = $roomRepository->sum();
+        $sum = $coinChangeRepository->rommSum();
         $rows = $roomRepository->getAll();
         Helper::plog("查看汇总报表", 1);
         return view("admin.data.list", compact("data", "recharge", "sum", "rows"));

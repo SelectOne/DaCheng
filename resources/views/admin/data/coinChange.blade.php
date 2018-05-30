@@ -49,10 +49,10 @@
 
     <script type="text/html" id="tpl1">
         @verbatim
-            {{#  if(d.end_coin > d.start_coin){ }}
-            <span style="color: darkgreen">+{{ d.change_coin }}</span>
+            {{#  if(d.change_coin > 0){ }}
+            <span style="color: darkgreen">{{ d.change_coin }}</span>
             {{#  } else { }}
-            <span style="color: red">-{{d.change_coin }}</span>
+            <span style="color: red">{{d.change_coin }}</span>
             {{#  } }}
         @endverbatim
     </script>

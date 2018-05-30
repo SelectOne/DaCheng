@@ -143,7 +143,7 @@
                         , {field: 'realname', title: '真实姓名', width: 100,}
                         , {field: 'sex', title: '性别', width: 80, unresize: true, sort: true, templet: '#sexTpl'}
                         , {field: 'num', title: '金币', width: 100, unresize: true, sort: true, templet: '#tpl5'}
-                        , {field: 'strongbox', title: '保险柜', width: 100, unresize: true, sort: true}
+                        , {field: 'num1', title: '保险柜', width: 100, unresize: true, sort: true}
                         , {field: 'ip', title: 'IP地址', width: 110, unresize: true}
                         , {field: 'member_level', title: '会员级别', width: 100, unresize: true, sort: true, templet: '#tpl2'}
                         , {field: 'manage_level', title: '管理级别', width: 100, unresize: true, sort: true, templet: '#tpl3'}

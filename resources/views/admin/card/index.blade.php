@@ -80,7 +80,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">赠送金币</label>
                             <div class="layui-input-block">
-                                <input type="number" name="given" lay-verify="required|number" value="" class="layui-input" style="width: 190px">
+                                <input type="number" name="given" lay-verify="required|number" value="" class="layui-input" style="width: 190px" disabled>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -196,7 +196,7 @@
                         , page: true //开启分页
                         , cols: [[ //表头
                             {type: 'checkbox', fixed: 'left'}
-                            , {field: 'card_name', title: '会员卡',}
+                            , {field: 'card_name', title: '会员卡'}
                             , {field: 'card_num', title: '库存'}
                             , {field: 'used', title: '已充值'}
                             , {field: 'not_used', title: '未充值'}
@@ -235,7 +235,6 @@
                         ]]
                     });
                 }
-
             });
 
             var layid = location.hash.replace(/^#tab=/, '');
@@ -244,18 +243,21 @@
             // 监听Select选择框
             form.on('select(type_id)', function(data){
                 if (data.value){
-                    $.getJSON("getPrice/"+data.value, function (msg) {
-                        console.log(msg)
-                        $("input[name='card_price']").val(msg)
-                        $("input[name='card_price1']").val(msg)
+                    $.ajax({
+                        method: "get",
+                        url: "getPrice/"+data.value,
+                        dataType: "json",
+                        data: {},
+                        success: function (rs) {
+                            $("input[name='card_price']").val(rs[0].card_price)
+                            $("input[name='card_price1']").val(rs[0].card_price)
+                            $("input[name='given']").val(rs[0].given)
+                        }
                     })
                 } else {
                     $("input[name='card_price']").val("")
                     $("input[name='card_price1']").val("")
                 }
-                // console.log(data)
-
-
             });
 
             laydate.render({
@@ -325,9 +327,6 @@
                     });
                 }
             });
-
-
-
 
             //排序
             table.on('sort(test2)', function(obj){

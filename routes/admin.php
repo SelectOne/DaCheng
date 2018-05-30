@@ -1,32 +1,24 @@
 <?php
-//Route::resource('admin/user','Admin\UserController');
-
-//Route::get('verify', 'Admin\LoginController@verify');
-Route::any('test','Test\TestController@index');
+Route::get('/', function (){
+    throw new \Exception("路径错误!", 1);
+//    abort(403);
+});
+Route::any('test', 'Test\TestController@index');
 Route::get('admin/login', 'Admin\LoginController@index');
 Route::post('admin/login', 'Admin\LoginController@login');
-Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], function() {
-    Route::get('/','IndexController@main');
-    Route::get('index','IndexController@index');
+Route::group(['prefix' => 'admin', 'namespace'=>"Admin", 'middleware'=>'admin'], function() {
+    Route::get('/', 'IndexController@main');
+    Route::get('index', 'IndexController@index');
     Route::get('logout', 'LoginController@outLogin');
 
     // 权限
-    Route::resource('admin','AdminController');
+    Route::resource('admin', 'AdminController');
     Route::get('getData1','AdminController@getData')->name("admin.getData");
 
-//    Route::resource('node','NodeController');
-    Route::get('node', 'NodeController@index')->name('node.index');
-    Route::get('node/create', 'NodeController@create')->name('node.create');
-    Route::post('node/create', 'NodeController@store')->name('node.store');
-    Route::get('node/{id}', 'NodeController@show')->name('node.show');
-    Route::get('node/{id}/edit', 'NodeController@edit')->name('node.edit');
-    Route::patch('node/{id}', 'NodeController@update')->name('node.update');
-    Route::delete('node/{id}', 'NodeController@destroy')->name('node.destroy');
-
-    Route::resource('role','RoleController');
+    Route::resource('role', 'RoleController');
     Route::get('api/getData','RoleController@getData')->name("role.getData");
 
-// PermissionController
+    // PermissionController
     Route::get('permission/index', 'PermissionController@index');
     Route::get('permission/getData', 'PermissionController@getData');
     Route::post('permission/store', 'PermissionController@store');
@@ -37,7 +29,7 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('member/index', 'MemberController@index');
     Route::get('member/getData', 'MemberController@getData');                                            // 数据表格接口
     Route::get('member/checkStatus', 'MemberController@checkStatus');                                    // 冻结/解冻
-    Route::get('member/recharge', 'MemberController@recharge');                                          // 冻结/解冻
+    Route::get('member/recharge', 'MemberController@recharge');                                          // 充值
     Route::get('member/limit', 'MemberController@limit');                                                // 限制列表
 
     // RestrictController
@@ -52,21 +44,19 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('order/getData', 'OrderController@getData');
 
     // CardController
-    Route::resource('card','CardController');
+    Route::resource('card', 'CardController');
     Route::get('getData', 'CardController@getData')->name("card.getData");
     Route::get('getCard', 'CardController@getData1')->name("cardinfo.getData");
     Route::get('getType', 'CardController@getData2')->name("type.getData");
     Route::get('getPrice/{id}', function ($id, \App\Models\Type $type){
-        return $type->where('id', $id)->value("card_price");
+        return json_encode($type->where('id', $id)->get());
     })->name("type.getPrice");
 
-
     // TypeController
-    Route::resource('type','TypeController');
-//    Route::resource('cardinfo','CardinfoController');
-//    Route::get('getCard', 'CardinfoController@getData')->name("cardinfo.getData");
+    Route::resource('type', 'TypeController');
 
-    Route::resource('log','LogController');
+    // LogController
+    Route::resource('log', 'LogController');
     Route::get('getLog', 'LogController@getData')->name("log.getData");
 
     // 数据分析
@@ -84,4 +74,7 @@ Route::group(['prefix' => 'admin','namespace'=>"Admin",'middleware'=>'admin'], f
     Route::get('collect', 'IndexController@collect');
     Route::get('coinChange', 'IndexController@coinChange');
     Route::get('coin', 'IndexController@coin');
+
+    // SettingController
+    Route::resource('settings', 'SettingController', ['only' => [ 'index', 'update' ]]);
 });

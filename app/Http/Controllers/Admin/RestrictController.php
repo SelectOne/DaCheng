@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\RestrictRequest;
 use App\Repositories\RestrictRepository;
 use App\Services\Helper;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class RestrictController extends BaseController
@@ -46,13 +47,16 @@ class RestrictController extends BaseController
     {
         $arr = $request->options();
 
-        if ($this->repository->create($arr)) {
-            Helper::plog("新建限制地址", 2);
+        try{
+            $this->repository->create($arr);
             return redirect("admin/restrict/index")->with(["success"=>1, "msg"=>"操作成功!"]);
-        } else {
-            return redirect("admin/restrict/index")->withErrors("操作失败!");
         }
-
+        catch (\Illuminate\Database\QueryException $e) {
+            $error_code = $e->errorInfo[0];
+            if ($error_code == 23000) {
+                return redirect("admin/restrict/index")->withErrors("IP或机器码请不要重复!");
+            }
+        }
     }
 
     /**

@@ -80,29 +80,29 @@ class MemberRepository extends Repository
      */
     public function recharge($id, $num)
     {
-        DB::transaction( function () use( $id, $num )
-        {
+        DB::transaction(function () use ($id, $num) {
             // 当前充值玩家
             $row = Member::find($id);
             // 插入玩家金币变化表
             CoinChange::create([
-                "mid"         => $id,
-                "start_coin"  => $row->num,
+                "mid" => $id,
+                "start_coin" => $row->num,
                 "change_coin" => $num,
-                "end_coin"    => $row->num + $num,
-                "type"        => 5,
+                "end_coin" => $row->num + $num,
+                "type" => 5,
             ]);
             // 玩家表金币增长
             $row->num = $row->num + $num;
             $row->save();
             // 插入赠送金币表
             Given::create([
-                "mid"  => $id,
-                "num"  => $num,
+                "mid" => $id,
+                "num" => $num,
                 "type" => 2,
             ]);
         });
     }
+
 
     public function register($time)
     {
@@ -168,7 +168,7 @@ class MemberRepository extends Repository
         }
         $data = $data->where([
                                 ['status', '=', 0],
-                                ["duration", '>=', 1]
+                                ["duration", '>=', 3600]
                             ])
                             ->groupBy('date')
                             ->get([
@@ -192,7 +192,7 @@ class MemberRepository extends Repository
         $num0 = Member::where('login_time', '>=', $range)
             ->where('status', 0)
             ->where([
-                ["duration", '<', 1]
+                ["duration", '<', 3600]
             ])
             ->get([
                 DB::raw('count(id) as value')
@@ -203,8 +203,8 @@ class MemberRepository extends Repository
         $num1 = Member::where('login_time', '>=', $range)
                         ->where('status', 0)
                         ->where([
-                            ["duration", '>=', 1],
-                            ["duration", '<', 40]
+                            ["duration", '>=', 3600],
+                            ["duration", '<', 40*3600]
                         ])
                         ->get([
                             DB::raw('count(id) as value')
@@ -215,7 +215,7 @@ class MemberRepository extends Repository
         $num2 = Member::where('login_time', '>=', $range)
                         ->where('status', 0)
                         ->where([
-                            ["duration", '>=', 40]
+                            ["duration", '>=', 40*3600]
                         ])
                         ->get([
                             DB::raw('count(id) as value')
@@ -224,6 +224,4 @@ class MemberRepository extends Repository
         $arr[2] = $num2[0]['value'];
         return $arr;
     }
-
-
 }

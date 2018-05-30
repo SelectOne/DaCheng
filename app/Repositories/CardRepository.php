@@ -22,14 +22,14 @@ class CardRepository extends Repository
     // 分页
     public function limit($arr)
     {
-//        $data = $this->model->with([
-//            'info' => function ($query) use($arr){
-//                $query->whereBetween('created_time', $arr['tt'],'and',$arr['not']);
-//            },
-//        ]);
+        /*$data = $this->model->whereHas(
+            'info', function ($query) use($arr){
+                $query->whereBetween('created_time', $arr['tt'],'and',$arr['not']);
+            }
+        );*/
         $data = DB::table("card")
                     ->leftJoin("card_info as info", "info.id", "=" ,"card.card_info_id")
-                    ->leftJoin("type", "type.id", "=" ,"card.type_id")
+                    ->leftJoin("type", "type.id", "=" ,"info.type_id")
                     ->leftJoin("admin", "admin.admin_id", "=" ,"info.admin_id")
                     ->select("card.*","info.created_time","info.card_num","info.total_price","type.name","type.given","type.card_price","admin.admin_name","admin.ip")
                     ->whereBetween('info.created_time', $arr['tt'],'and',$arr['not']);
@@ -43,6 +43,7 @@ class CardRepository extends Repository
             $v->created_time = date("Y-m-d H:i:s" ,$v->created_time);
         }
         $data['count'] = $count;
+//        dd($data);
         return $data;
     }
 
@@ -50,18 +51,19 @@ class CardRepository extends Repository
     public function creatCard($data)
     {
         DB::transaction(function () use($data){
-            $id = DB::table('card_info')->insert($data['info']);
+            $id = DB::table('card_info')->insertGetId($data['info']);
 
             for ($i=1; $i<= $data['card_num']; $i++) {
                 list($a,$b)=explode(' ', microtime());
-                $unquid = substr(str_replace(".", "", $b.$a), 4, $data['card_length']-2);
+                $u = rand(001, 999);
+                $unquid = substr(str_replace(".", "", $b.$u.$a), 4, $data['card_length'])-1;
                 $card_id = $data['card_first'].$unquid;
                 $password = substr(md5($unquid), '8', '10');
                 DB::table('card')->insert([
-                    'card_id' => $card_id.$i,
+                    'card_id' => $card_id,
                     'type_id' => $data['type_id'],
                     'card_info_id' => $id,
-                    'passwprd' > $password,
+                    'password' => $password,
                 ]);
             }
         });

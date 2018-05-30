@@ -64,4 +64,11 @@ class CoinChangeRepository extends Repository
 //        dd($data);
         return $data;
     }
+
+    // 平台游戏金币总输赢
+    public function rommSum()
+    {
+        $sum = $this->model->where("type", 1)->sum("change_coin");
+        return $sum;
+    }
 }

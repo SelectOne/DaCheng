@@ -39,7 +39,6 @@ class RestrictRepository extends Repository
             } else {
                 $v['limit_time'] = date("Y-m-d H:i:s", $v['limit_time']);
             }
-
             $v['create_time'] = date("Y-m-d H:i:s", $v['create_time']);
         }
         $data['count'] = $count;

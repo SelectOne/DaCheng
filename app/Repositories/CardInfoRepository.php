@@ -10,6 +10,7 @@ namespace App\Repositories;
 
 use App\Repositories\Eloquent\Repository;
 use function foo\func;
+use Illuminate\Support\Facades\DB;
 
 class CardInfoRepository extends Repository
 {
@@ -28,17 +29,29 @@ class CardInfoRepository extends Repository
             $arr['order'] = "desc";
         }
         $count = $this->model->count();
-        $data = $this->model->orderBy($arr['field'], $arr['order'])->offset($arr['offset'])->limit($arr['limit'])->get();
+        /*$data = $this->model->with('card','type')->orderBy($arr['field'], $arr['order'])->offset($arr['offset'])->limit($arr['limit'])->get();
         foreach ($data as &$v) {
-            foreach ($v->card as $item) {
-                $v['card_name'] = $item->type->name;
-                $v['given'] = $item->type->given;
-            }
+            $v['card_name'] = $v->type->name;
+            $v['given'] = $v->type->given;
             $v['used'] = $v->card->where('is_used', 1)->count();
             $v['not_used'] = $v->card->where('is_used', 0)->count();
             $v['expire'] = $v->card->where('expire_time', '<', time())->count();
             $v['total_given'] = $v['card_num'] * $v['given'];
-        }
+        }*/
+
+        $data = DB::table("card_info as i")
+                    ->leftJoin("card as c", "c.card_info_id", "=", "i.id")
+                    ->leftJoin("type as t", "t.id", "=", "i.type_id")
+                    ->groupBy("i.type_id", "t.name", "i.total_price")
+                    ->where("c.is_used", 0)
+                    ->offset($arr['offset'])
+                    ->limit($arr['limit'])
+                    ->get([
+                        "t.name as card_name",
+                        DB::raw("sum(gm_i.total_price) as total_price"),
+                        DB::raw("count(gm_i.card_num) as card_num"),
+                        DB::raw("count(gm_c.id) as not_used")
+                    ]);
         $data['count'] = $count;
         return $data;
     }

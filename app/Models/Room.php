@@ -8,5 +8,10 @@ class Room extends Model
 {
     protected $table = "room";
     public $timestamps = false;
-    protected $fillable = ['id', 'name', 'num'];
+    protected $fillable = ['id', 'name'];
+
+    public function num()
+    {
+        return $this->hasMany("App\Models\CoinChange", "room_id", "id");
+    }
 }

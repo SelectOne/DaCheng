@@ -123,6 +123,7 @@ class CardController extends BaseController
     public function getData1(Request $request, CardInfoRepository $repository)
     {
         $arr = $request->all();
+//        dd(parent::TableApi($arr, $repository));
         return parent::TableApi($arr, $repository);
     }
 

@@ -10,6 +10,7 @@ namespace App\Repositories;
 
 
 use App\Repositories\Eloquent\Repository;
+use Illuminate\Support\Facades\DB;
 
 class RoomRepository extends Repository
 {
@@ -19,15 +20,21 @@ class RoomRepository extends Repository
         return "App\Models\Room";
     }
 
-    public function sum()
+    /*public function sum()
     {
         $sum = $this->model->sum("num");
         return $sum;
-    }
+    }*/
 
     public function getAll()
     {
-        $rows = $this->model->get();
+        $rows = DB::table('room')
+                    ->leftJoin("coin_change as c", "c.room_id", "=", "room.id")
+                    ->select("room.*", DB::raw("sum(change_coin) as num"))
+                    ->groupBy("room.id", "room.name")
+                    ->where("c.type", 1)
+                    ->get();
+//        dd($rows);
         return $rows;
     }
 }

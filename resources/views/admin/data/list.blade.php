@@ -27,9 +27,9 @@
                 <td>{{$data[2]}}</td>
                 <td>{{$data[3]}}</td>
                 @if ( $sum > 0 )
-                    <td><span style="color: darkgreen">+{{$sum}}</span></td>
+                    <td><span style="color: darkgreen">{{$sum}}</span></td>
                 @else
-                    <td><span style="color: red">-{{$sum}}</span></td>
+                    <td><span style="color: red">{{$sum}}</span></td>
                 @endif
             </tr>
         </tbody>
@@ -40,7 +40,7 @@
     <table class="layui-table">
         <thead>
         <tr>
-            <th>游戏ID</th>
+            <th>游戏序号</th>
             <th>游戏名称</th>
             <th>系统金币输(-)赢(+)</th>
         </tr>
@@ -51,9 +51,9 @@
                 <td>{{$row->id}}</td>
                 <td>{{$row->name}}</td>
                 @if ( $row->num > 0 )
-                    <td><span style="color: darkgreen">+{{$row->num}}</span></td>
+                    <td><span style="color: darkgreen">{{$row->num}}</span></td>
                 @else
-                    <td><span style="color: red">-{{$row->num}}</span></td>
+                    <td><span style="color: red">{{$row->num}}</span></td>
                 @endif
             </tr>
         @endforeach

@@ -100,7 +100,9 @@
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="15" date-url="{{ url("admin/coinChange") }}">玩家账变记录</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="">发布商品</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="16" date-url="{{  route("settings.index") }}">系统设置</a>
+                </li>
             </ul>
         </div>
     </div>

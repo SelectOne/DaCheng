@@ -42,6 +42,7 @@ class CardRequest extends FormRequest
                     'max_use'      => $data['max_use'],
                     'created_time' => time(),
                     'expire_time'  => strtotime($data['expire_time']),
+                    'type_id'      => $data['type_id'],
                 ];
                 return $data;
                 break;
