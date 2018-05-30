@@ -62,6 +62,21 @@ class RestrictRequest extends FormRequest
                 }
                 return $data;
                 break;
+            case 'getMember':
+                $data = $this->all();
+                $data['offset'] = ( $data['page']-1 ) * $data['limit'];
+//                dd($data);
+                /*if ( ! is_null($data['ip']) )
+                {
+                    $data['ip'] = $this->get('ip');
+                }
+
+                if (! is_null($data['ip']) )
+                {
+                    $data['machine_ip'] = $this->get('machine_ip');
+                }*/
+                return $data;
+                break;
         }
     }
 

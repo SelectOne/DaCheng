@@ -60,9 +60,9 @@
 
     <script type="text/html" id="Tpl3">
             @{{#  if(d.type){ }}
-            @{{ "机器码:" }}<a href="{{url("admin/member/index?machine_ip=")}}@{{d.ip}}" class="layui-table-link">@{{ d.ip }}</a>
+            @{{ "机器码:" }}<a href="{{url("admin/limit_member?machine_ip=")}}@{{d.ip}}" class="layui-table-link">@{{ d.ip }}</a>
             @{{#  } else { }}
-            @{{ "IP:" }}<a href="{{url("admin/member/index?ip=")}}@{{d.ip}}" class="layui-table-link">@{{ d.ip }}</a>
+            @{{ "IP:" }}<a href="{{url("admin/limit_member?ip=")}}@{{d.ip}}" class="layui-table-link">@{{ d.ip }}</a>
             @{{#  } }}
     </script>
 

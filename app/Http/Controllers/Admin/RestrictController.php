@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\RestrictRequest;
+use App\Repositories\MemberIpRepository;
 use App\Repositories\RestrictRepository;
 use App\Services\Helper;
 use Illuminate\Database\QueryException;
@@ -122,5 +123,20 @@ class RestrictController extends BaseController
     {
         $arr = $request->filter();
         return parent::TableApi($arr, $this->repository);
+    }
+
+    public function limit_member(Request $request)
+    {
+        $input = $request->all();
+        return view("admin.restrict.list", compact("input"));
+    }
+
+    public function getMember(RestrictRequest $request, MemberIpRepository $memberIpRepository)
+    {
+        $arr = $request->options();
+        $data = $memberIpRepository->limit_member($arr);
+        $count = $data['count'];
+        unset($data['count']);
+        return ['code'=>0,'msg'=>'成功','count'=>$count, 'data'=>$data];
     }
 }

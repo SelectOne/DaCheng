@@ -38,6 +38,8 @@ Route::group(['prefix' => 'admin', 'namespace'=>"Admin", 'middleware'=>'admin'],
     Route::post('restrict/store', 'RestrictController@store');
     Route::post('restrict/update', 'RestrictController@update');
     Route::get('restrict/destroy', 'RestrictController@destroy');
+    Route::get('limit_member', 'RestrictController@limit_member');
+    Route::get('getMember', 'RestrictController@getMember');
 
     // OrderController
     Route::get('order/index', 'OrderController@index');
