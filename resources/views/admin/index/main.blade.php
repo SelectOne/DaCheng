@@ -48,14 +48,6 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree"  lay-filter="test">
                 <li class="layui-nav-item"><a href="">首页</a></li>
-                {{--<li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">权限管理</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="1" date-url="{{url('admin/admin')}}">管理员列表</a></dd>
-                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="2" date-url="{{url('admin/role')}}">角色列表</a></dd>
-                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="3" date-url="{{url('admin/node')}}">节点列表</a></dd>
-                    </dl>
-                </li>--}}
                 <li class="layui-nav-item">
                     <a class="" href="javascript:;">用户管理</a>
                     <dl class="layui-nav-child">
@@ -91,6 +83,7 @@
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="10" date-url="{{ url("admin/member/statistics") }}">注册统计</a></dd>
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="11" date-url="{{ url("admin/member/inRoom") }}">在房间玩家</a></dd>
                         <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="12" date-url="{{ url("admin/member/active") }}">活跃玩家统计</a></dd>
+                        <dd><a href="javascript:;" class="site-demo-active" data-type="tabAdd" idd="13" date-url="{{ url("admin/member/coin_info") }}">玩家金币统计</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">

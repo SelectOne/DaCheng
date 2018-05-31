@@ -222,4 +222,29 @@ class MemberController extends BaseController
         }, $data);
         return $data;
     }
+
+    /**
+     *金币统计
+     */
+    public function coin_info()
+    {
+        //查询不同金币区间下的用户人数
+        //总数
+        $count = Member::where('status',0)->count();
+        $re1 = $this->MRepository->coin_count('',10000);
+        $re2 = $this->MRepository->coin_count(10000,100000);
+        $re3 = $this->MRepository->coin_count(100000,500000);
+        $re4 = $this->MRepository->coin_count(500000,1000000);
+        $re5 = $this->MRepository->coin_count(1000000,5000000);
+        $re6 = $this->MRepository->coin_count(5000000,10000000);
+        $re7 = $this->MRepository->coin_count(10000000,30000000);
+        $re8 = $this->MRepository->coin_count(30000000,'');
+        //占比
+        $data = [$re1/$count,$re2/$count,$re3/$count,$re4/$count,$re5/$count,$re6/$count,$re7/$count,$re8/$count];
+        //人数
+        $data2 = [$re1,$re2,$re3,$re4,$re5,$re6,$re7,$re8];
+        //总游戏币
+        $sum = Member::where('status',0)->sum('num');
+        return view("admin.data.coin_info", compact("data",'data2','sum','count'));
+    }
 }

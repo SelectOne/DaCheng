@@ -31,6 +31,7 @@ Route::group(['prefix' => 'admin', 'namespace'=>"Admin", 'middleware'=>'admin'],
     Route::get('member/checkStatus', 'MemberController@checkStatus');                                    // 冻结/解冻
     Route::get('member/recharge', 'MemberController@recharge');                                          // 充值
     Route::get('member/limit', 'MemberController@limit');                                                // 限制列表
+    Route::get('member/coin_info', 'MemberController@coin_info');
 
     // RestrictController
     Route::get('restrict/index', 'RestrictController@index');

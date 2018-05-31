@@ -224,4 +224,19 @@ class MemberRepository extends Repository
         $arr[2] = $num2[0]['value'];
         return $arr;
     }
+
+    //查询不同区间下的用户数量
+    public function coin_count($num_s='',$num_t='')
+    {
+        $query =  $this->model()::where('status',0);
+        if(empty($num_s)){
+            $query = $query->where('num','<',$num_t);
+        }elseif(empty($num_t)){
+            $query = $query->where('num','>=',$num_s);
+        }else{
+            $query = $query->whereBetween('num',[$num_s,$num_t]);
+        }
+        return $query ->count();
+    }
+
 }
