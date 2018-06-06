@@ -79,12 +79,13 @@ class OrderRepository extends Repository
     // 统计充值人数
     public function rechargeNum($type = null)
     {
-        $num = $this->model->where('status', 1);
+        $num = $this->model->groupBy("mid");
         if (is_null($type)) {
-            $num = $num->count();
+            $num = $num->get([DB::raw("count(mid)")])->count();
         } else {
-            $num = $num->groupBy('mid')->count();
+            $num = $num->havingRaw('count(mid) > 1')->get([DB::raw("count(mid)")])->count();
         }
+//        dd($num);
         return $num;
     }
 

@@ -99,15 +99,15 @@
             <input type="text" name="name" class="form-control new-style-input" placeholder="用户名" autofocus>
             <input type="password" name="password" class="form-control new-style-input" placeholder="密码">
 
-            <div style="width: 90%;margin: 15px auto">
+            <div>
 
-                <input type="text"  name="captcha" class="form-controla new-style-input2" placeholder="验证码" style="width: 60%;height: 38px;">
+                <input type="text"  name="captcha" class="form-controla new-style-input" placeholder="验证码" style="width: 50%;height: 38px;">
                 <a href="javascript:;" id="recode1" title="看不清？换一张！">
                     <img src="{!! captcha_src(); !!}" border="0" class="verifyimg" id="verifyimg" style="width: 38%;height: 38px"/>
                 </a>
             </div>
 
-            <button id="btn-submit" class="btn btn-lg btn-login btn-block"  type="submit" style="width: 90%;margin:15px auto;">登录</button>
+            <button id="btn-submit" class="btn  btn-login"  type="submit" style="width: 99%;margin:15px auto;">登录</button>
 
         </div>
 

@@ -52,7 +52,6 @@ class CardRepository extends Repository
     {
         DB::transaction(function () use($data){
             $id = DB::table('card_info')->insertGetId($data['info']);
-
             for ($i=1; $i<= $data['card_num']; $i++) {
                 list($a,$b)=explode(' ', microtime());
                 $u = rand(001, 999);
@@ -61,7 +60,6 @@ class CardRepository extends Repository
                 $password = substr(md5($unquid), '8', '10');
                 DB::table('card')->insert([
                     'card_id' => $card_id,
-                    'type_id' => $data['type_id'],
                     'card_info_id' => $id,
                     'password' => $password,
                 ]);
