@@ -100,12 +100,13 @@ class CardController extends BaseController
      */
     public function destroy($id)
     {
-        if ($this->repository->delete($id)) {
-            Helper::plog("删除实卡ID=".$id, 2);
-            return json_encode(['code'=>1,'msg'=>'删除成功']);
-        } else {
+        try {
+            $this->repository->delete1($id);
+        } catch (\Exception $e) {
             return json_encode(['code'=>0,'msg'=>'删除失败']);
         }
+        Helper::plog("删除实卡ID=".$id, 2);
+        return json_encode(['code'=>1,'msg'=>'删除成功']);
     }
 
     // 会员卡数据

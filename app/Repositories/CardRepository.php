@@ -67,4 +67,26 @@ class CardRepository extends Repository
         });
     }
 
+    /**
+     * 删除实卡
+     * @param $id
+     */
+    public function delete1($id)
+    {
+        DB::transaction(function () use($id){
+            $row = Card::find($id);
+            $info = DB::table("card_info as c")
+                ->leftJoin("type as t", "t.id", "=", "c.type_id")
+                ->where("c.id", $row->card_info_id)
+                ->select("t.card_price", "c.card_num")
+                ->first();
+            DB::table("card_info")
+                ->where("id", $row->card_info_id)
+                ->update([
+                    "card_num"    => $info->card_num - 1,
+                    "total_price" => ($info->card_num - 1) * $info->card_price,
+                ]);
+            $row->delete();
+        });
+    }
 }
